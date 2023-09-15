@@ -1,7 +1,8 @@
 import "./App.css";
+import { AppRouting } from "./AppRouting";
 
 function App() {
-  return <></>;
+  return <AppRouting />;
 }
 
 export default App;
