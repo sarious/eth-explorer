@@ -14,8 +14,10 @@ export const BlockPage: FC<BlockPageProps> = (props) => {
 
   useEffect(() => {
     async function getBlockInfo(blockSearch: string) {
+      const hash = blockSearch.toLowerCase().startsWith("0x");
       const blockNumber = parseInt(blockSearch);
-      const blockHashOrTag = !isNaN(blockNumber) ? blockNumber : blockSearch;
+      const blockHashOrTag =
+        !isNaN(blockNumber) && !hash ? blockNumber : blockSearch;
       const block = await alchemy?.core.getBlock(blockHashOrTag);
       if (!block) return;
 
