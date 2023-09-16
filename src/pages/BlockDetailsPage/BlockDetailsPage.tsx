@@ -17,7 +17,6 @@ import {
   GridItem,
   Heading,
   IconButton,
-  Link,
 } from "@chakra-ui/react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 
@@ -25,7 +24,6 @@ export const BlockDetailsPage: FC<BlockDetailsPageProps> = (props) => {
   const [blockDetails, setBlockDetails] = useState<Block | null>(null);
 
   const { blockNumber = "latest" } = useParams();
-  console.log();
 
   const alchemy = useAlchemy();
 
@@ -36,14 +34,11 @@ export const BlockDetailsPage: FC<BlockDetailsPageProps> = (props) => {
       const blockHashOrTag =
         !isNaN(blockNumber) && !hash ? blockNumber : blockSearch;
       const block = await alchemy?.core.getBlock(blockHashOrTag);
-      console.log(block);
       if (!block) return;
 
-      console.log(block);
       setBlockDetails(block);
     }
 
-    console.log(blockNumber);
     getBlockInfo(blockNumber);
   }, [alchemy?.core, blockNumber]);
 
