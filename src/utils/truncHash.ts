@@ -1,34 +1,34 @@
 export type TruncPos = "start" | "middle" | "end";
 
-export function truncHash(
-  hash: string | undefined,
+export function truncString(
+  str: string | undefined,
   maxLength: number,
   truncPos: TruncPos = "middle"
 ) {
-  if (!hash) {
-    return hash;
+  if (!str) {
+    return str;
   }
 
   switch (truncPos) {
     case "start":
-      return `...${hash.slice(-maxLength)}`;
+      return `...${str.slice(-maxLength)}`;
     case "middle":
-      const truncCount = hash.length - maxLength;
+      const truncCount = str.length - maxLength;
       if (truncCount <= "...".length) {
-        return hash;
+        return str;
       }
       const endLength = Math.floor(maxLength / 2);
       const startLength = maxLength - endLength;
-      return `${hash.slice(0, startLength)}...${hash.slice(-endLength)}`;
+      return `${str.slice(0, startLength)}...${str.slice(-endLength)}`;
     case "end":
-      return `${hash.slice(0, maxLength)}...`;
+      return `${str.slice(0, maxLength)}...`;
   }
 }
 
 export function truncAddress(address: string | undefined) {
-  return truncHash(address, 12, "middle");
+  return truncString(address, 12, "middle");
 }
 
 export function truncTxHash(txHash: string | undefined) {
-  return truncHash(txHash, 16, "end");
+  return truncString(txHash, 16, "end");
 }

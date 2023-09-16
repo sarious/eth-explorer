@@ -15,6 +15,7 @@ import {
   Link as ChakraLink,
 } from "@chakra-ui/react";
 import { GetTokensForOwnerResponse } from "alchemy-sdk";
+import { truncString } from "../../utils/truncHash";
 
 export const AddressDetailsPage: FC<AddressDetailsPageProps> = (props) => {
   const [tokensResponse, setTokensResponse] =
@@ -27,7 +28,6 @@ export const AddressDetailsPage: FC<AddressDetailsPageProps> = (props) => {
   useEffect(() => {
     async function getAddressInfo(address: string) {
       const tokensResponse = await alchemy?.core.getTokensForOwner(address);
-      console.log(tokensResponse);
       if (!tokensResponse) return;
 
       setTokensResponse(tokensResponse);
@@ -60,7 +60,7 @@ export const AddressDetailsPage: FC<AddressDetailsPageProps> = (props) => {
                 ) : (
                   <Box borderRadius="full" boxSize={6} bgColor={"grey"} />
                 )}{" "}
-                {token.name}
+                {truncString(token.name, 20, "end")}
               </Td>
               <Td>
                 {token.balance} {token.symbol}
