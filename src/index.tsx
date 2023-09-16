@@ -6,6 +6,7 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { AlchemyProvider } from "./providers/Alchemy.provider";
+import { ThemeProvider } from "./providers/Theme.provider";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -14,7 +15,9 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
       <AlchemyProvider>
-        <App />
+        <ThemeProvider>
+          <App />
+        </ThemeProvider>
       </AlchemyProvider>
     </BrowserRouter>
   </React.StrictMode>
