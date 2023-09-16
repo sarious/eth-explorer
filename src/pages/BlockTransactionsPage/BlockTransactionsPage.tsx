@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from "react";
 import { BlockTransactionsPageProps } from ".";
 import { useParams } from "react-router-dom";
 import { useAlchemy } from "../../providers/Alchemy.provider";
-import { BlockWithTransactions } from "alchemy-sdk";
+import { BlockWithTransactions, Utils } from "alchemy-sdk";
 import {
   Card,
   CardBody,
@@ -16,8 +16,8 @@ import {
   Thead,
   Tr,
 } from "@chakra-ui/react";
-import { toNumberOrUndefined } from "../BlockDetailsPage";
 import { LinkWithRouter } from "../../components/LinkWithRouter";
+import { truncAddress, truncTxHash } from "../../utils/truncHash";
 
 export const BlockTransactionsPage: FC<BlockTransactionsPageProps> = (
   props
@@ -70,19 +70,35 @@ export const BlockTransactionsPage: FC<BlockTransactionsPageProps> = (
             <Tbody>
               {blockWithTransactions?.transactions.map((tx) => (
                 <Tr key={tx.hash}>
-                  <Td>{tx.hash}</Td>
+                  <Td>
+                    <LinkWithRouter to={`/transactions/${tx.hash}`}>
+                      {truncTxHash(tx.hash)}
+                    </LinkWithRouter>
+                  </Td>
                   <Td>
                     <LinkWithRouter to={`/addresses/${tx.from}`}>
-                      {tx.from}
+                      {truncAddress(tx.from)}
                     </LinkWithRouter>
                   </Td>
                   <Td>
                     <LinkWithRouter to={`/addresses/${tx.to}`}>
-                      {tx.to}
+                      {truncAddress(tx.to)}
                     </LinkWithRouter>
                   </Td>
-                  <Td>{tx.value.toString()}</Td>
-                  <Td>{tx.gasPrice?.toString()} wei</Td>
+                  <Td>
+                    {tx.value ? (
+                      <> {Utils.formatUnits(tx.value, "ether")} ETH</>
+                    ) : (
+                      "-"
+                    )}
+                  </Td>
+                  <Td>
+                    {tx.gasPrice ? (
+                      <> {Utils.formatUnits(tx.gasPrice, "gwei")} Gwei</>
+                    ) : (
+                      "-"
+                    )}
+                  </Td>
                 </Tr>
               ))}
             </Tbody>

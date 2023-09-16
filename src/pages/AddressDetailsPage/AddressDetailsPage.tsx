@@ -48,7 +48,7 @@ export const AddressDetailsPage: FC<AddressDetailsPageProps> = (props) => {
         </Thead>
         <Tbody>
           {tokensResponse?.tokens.map((token) => (
-            <Tr key={token.name}>
+            <Tr key={token.contractAddress}>
               <Td display="flex" alignItems="center" gap={4}>
                 {token?.logo ? (
                   <Image

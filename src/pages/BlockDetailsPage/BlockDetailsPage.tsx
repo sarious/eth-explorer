@@ -19,6 +19,7 @@ import {
   IconButton,
 } from "@chakra-ui/react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
+import { LinkWithRouter } from "../../components/LinkWithRouter";
 
 export const BlockDetailsPage: FC<BlockDetailsPageProps> = (props) => {
   const [blockDetails, setBlockDetails] = useState<Block | null>(null);
@@ -106,13 +107,11 @@ export const BlockDetailsPage: FC<BlockDetailsPageProps> = (props) => {
 
               <GridItem>Transactions: </GridItem>
               <GridItem>
-                <ChakraLink
-                  as={ReactRouterLink}
-                  to={`transactions`}
-                  color="teal.500"
+                <LinkWithRouter
+                  to={`/blocks/${blockDetails.number}/transactions`}
                 >
                   {blockDetails?.transactions.length} transactions
-                </ChakraLink>
+                </LinkWithRouter>
               </GridItem>
 
               <GridItem>Difficulty: </GridItem>
