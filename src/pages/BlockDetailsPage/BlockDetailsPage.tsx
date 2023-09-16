@@ -23,7 +23,7 @@ import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 export const BlockDetailsPage: FC<BlockDetailsPageProps> = (props) => {
   const [blockDetails, setBlockDetails] = useState<Block | null>(null);
 
-  const { blockNumber = "latest" } = useParams();
+  const { blockHashOrBlockTag = "latest" } = useParams();
 
   const alchemy = useAlchemy();
 
@@ -39,8 +39,8 @@ export const BlockDetailsPage: FC<BlockDetailsPageProps> = (props) => {
       setBlockDetails(block);
     }
 
-    getBlockInfo(blockNumber);
-  }, [alchemy?.core, blockNumber]);
+    getBlockInfo(blockHashOrBlockTag);
+  }, [alchemy?.core, blockHashOrBlockTag]);
 
   const navigate = useNavigate();
   const navigateToPrevBlock = () => {
@@ -150,7 +150,7 @@ export const BlockDetailsPage: FC<BlockDetailsPageProps> = (props) => {
   );
 };
 
-function toNumberOrUndefined(value: BigNumber | null | undefined) {
+export function toNumberOrUndefined(value: BigNumber | null | undefined) {
   if (value === null || value === undefined) return null;
 
   return value.toNumber();
