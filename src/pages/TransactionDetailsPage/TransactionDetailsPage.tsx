@@ -13,7 +13,7 @@ import { useAlchemy } from "../../providers/Alchemy.provider";
 import { useParams } from "react-router-dom";
 import { TransactionResponse } from "alchemy-sdk";
 import { toNumberOrUndefined } from "../BlockDetailsPage";
-import { LinkWithRouter } from "../../components/LinkWithRouter";
+import { LinkWithRouter } from "../../components/ui/LinkWithRouter";
 
 export const TransactionDetailsPage: FC<TransactionDetailsPageProps> = (
   props

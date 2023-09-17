@@ -19,7 +19,7 @@ import {
   IconButton,
 } from "@chakra-ui/react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
-import { LinkWithRouter } from "../../components/LinkWithRouter";
+import { LinkWithRouter } from "../../components/ui/LinkWithRouter";
 
 export const BlockDetailsPage: FC<BlockDetailsPageProps> = (props) => {
   const [blockDetails, setBlockDetails] = useState<Block | null>(null);

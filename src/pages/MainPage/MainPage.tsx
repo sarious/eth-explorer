@@ -1,37 +1,14 @@
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, useRef } from "react";
 import { MainPageProps } from ".";
-import {
-  Card,
-  CardBody,
-  CardHeader,
-  Flex,
-  Input,
-  LinkBox,
-  LinkOverlay,
-} from "@chakra-ui/react";
-import { Link, useNavigate } from "react-router-dom";
+import { Flex, Input } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
 import { getNavigationPathBySearchValue } from "../../utils/getNavigationPathBySearchValue";
-import { useAlchemy } from "../../providers/Alchemy.provider";
+import { RecenlyMinedBlockCard } from "../../components/shared/RecenlyMinedBlockCard";
 
 export const MainPage: FC<MainPageProps> = (props) => {
-  const [recentlyMinedBlock, setRecentlyMinedBlock] = useState<
-    number | undefined
-  >(undefined);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const alchemy = useAlchemy();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    async function getMindeBlockNumber() {
-      const block = await alchemy?.core.getBlockNumber();
-      if (!block) return;
-
-      setRecentlyMinedBlock(block);
-    }
-
-    getMindeBlockNumber();
-  }, [alchemy?.core]);
 
   const onKeyDown = (e: any) => {
     if (e.keyCode === 13) {
@@ -53,17 +30,7 @@ export const MainPage: FC<MainPageProps> = (props) => {
       height="100vh"
       {...props}
     >
-      <LinkBox as={Card} variant="filled" size="sm">
-        <CardHeader>
-          <LinkOverlay
-            as={Link}
-            to={`/blocks/${recentlyMinedBlock || "latest"}`}
-          >
-            Recently Mined Block
-          </LinkOverlay>
-        </CardHeader>
-        <CardBody>{recentlyMinedBlock || "N/A"}</CardBody>
-      </LinkBox>
+      <RecenlyMinedBlockCard />
 
       <Input
         ref={inputRef}

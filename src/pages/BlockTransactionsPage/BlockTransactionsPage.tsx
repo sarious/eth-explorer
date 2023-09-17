@@ -16,7 +16,7 @@ import {
   Thead,
   Tr,
 } from "@chakra-ui/react";
-import { LinkWithRouter } from "../../components/LinkWithRouter";
+import { LinkWithRouter } from "../../components/ui/LinkWithRouter";
 import { truncAddress, truncTxHash } from "../../utils/truncHash";
 
 export const BlockTransactionsPage: FC<BlockTransactionsPageProps> = (
