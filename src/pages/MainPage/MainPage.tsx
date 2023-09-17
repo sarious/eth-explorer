@@ -2,6 +2,7 @@ import { FC, useRef } from "react";
 import { MainPageProps } from ".";
 import { Flex, Input } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
+import { getNavigationPathBySearchValue } from "../../utils/getNavigationPathBySearchValue";
 
 export const MainPage: FC<MainPageProps> = (props) => {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -13,20 +14,10 @@ export const MainPage: FC<MainPageProps> = (props) => {
       const value = inputRef.current?.value;
       if (!value) return;
 
-      const isHash = value.toLowerCase().startsWith("0x");
-      const blockNumber = parseInt(value);
-      const isNumber = !isNaN(blockNumber);
-      const isAddress = isHash && value.length === 42;
-      const isTxHash = isHash && value.length === 66;
-      if (isNumber) {
-        if (!isHash) {
-          navigate(`/blocks/${value}`);
-        } else if (isAddress) {
-          navigate(`/addresses/${value}`);
-        } else if (isTxHash) {
-          navigate(`/transactions/${value}`);
-        }
-      }
+      const navigationPath = getNavigationPathBySearchValue(value);
+      if (!navigationPath) return;
+
+      navigate(navigationPath);
     }
   };
 
