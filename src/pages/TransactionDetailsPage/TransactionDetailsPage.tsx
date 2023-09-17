@@ -14,6 +14,8 @@ import { useParams } from "react-router-dom";
 import { TransactionResponse } from "alchemy-sdk";
 import { toNumberOrUndefined } from "../BlockDetailsPage";
 import { LinkWithRouter } from "../../components/ui/LinkWithRouter";
+import { BlockLink } from "../../components/shared/BlockLink";
+import { AddressLink } from "../../components/shared/AddressLink";
 
 export const TransactionDetailsPage: FC<TransactionDetailsPageProps> = (
   props
@@ -58,30 +60,22 @@ export const TransactionDetailsPage: FC<TransactionDetailsPageProps> = (
 
           <GridItem>Block Number: </GridItem>
           <GridItem>
-            <LinkWithRouter to={`/blocks/${transactionDetails?.blockNumber}`}>
-              {transactionDetails?.blockNumber}
-            </LinkWithRouter>
+            <BlockLink data={transactionDetails?.blockNumber} />
           </GridItem>
 
           <GridItem>Block Hash: </GridItem>
           <GridItem>
-            <LinkWithRouter to={`/blocks/${transactionDetails?.blockHash}`}>
-              {transactionDetails?.blockHash}
-            </LinkWithRouter>
+            <BlockLink data={transactionDetails?.blockHash} />
           </GridItem>
 
           <GridItem>From: </GridItem>
           <GridItem>
-            <LinkWithRouter to={`/addresses/${transactionDetails?.from}`}>
-              {transactionDetails?.from}
-            </LinkWithRouter>
+            <AddressLink address={transactionDetails?.from} />
           </GridItem>
 
           <GridItem>To: </GridItem>
           <GridItem>
-            <LinkWithRouter to={`/addresses/${transactionDetails?.to}`}>
-              {transactionDetails?.to}
-            </LinkWithRouter>
+            <AddressLink address={transactionDetails?.to} />
           </GridItem>
 
           <GridItem>Nonce: </GridItem>

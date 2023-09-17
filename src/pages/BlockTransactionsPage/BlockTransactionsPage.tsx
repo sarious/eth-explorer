@@ -18,6 +18,7 @@ import {
 } from "@chakra-ui/react";
 import { LinkWithRouter } from "../../components/ui/LinkWithRouter";
 import { truncAddress, truncTxHash } from "../../utils/truncHash";
+import { AddressLink } from "../../components/shared/AddressLink";
 
 export const BlockTransactionsPage: FC<BlockTransactionsPageProps> = (
   props
@@ -76,14 +77,10 @@ export const BlockTransactionsPage: FC<BlockTransactionsPageProps> = (
                     </LinkWithRouter>
                   </Td>
                   <Td>
-                    <LinkWithRouter to={`/addresses/${tx.from}`}>
-                      {truncAddress(tx.from)}
-                    </LinkWithRouter>
+                    <AddressLink address={tx.from} />
                   </Td>
                   <Td>
-                    <LinkWithRouter to={`/addresses/${tx.to}`}>
-                      {truncAddress(tx.to)}
-                    </LinkWithRouter>
+                    <AddressLink address={tx.to} />
                   </Td>
                   <Td>
                     {tx.value ? (

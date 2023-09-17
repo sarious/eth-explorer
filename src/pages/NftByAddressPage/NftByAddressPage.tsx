@@ -18,7 +18,7 @@ import {
   Thead,
   Tr,
 } from "@chakra-ui/react";
-import { truncAddress } from "../../utils/truncHash";
+import { AddressLink } from "../../components/shared/AddressLink";
 
 export const NftByAddressPage: FC<NftByAddressPageProps> = (props) => {
   const [nfts, setNFTs] = useState<OwnedNftsResponse>();
@@ -56,9 +56,10 @@ export const NftByAddressPage: FC<NftByAddressPageProps> = (props) => {
       <CardBody>
         <Text>Total Count: {nfts?.totalCount}</Text>
         <TableContainer>
-          <Table>
+          <Table variant="striped" colorScheme="gray">
             <Thead>
               <Tr>
+                <Th>Token Id</Th>
                 <Th>Qty</Th>
                 <Th>Title</Th>
                 <Th>Type</Th>
@@ -71,6 +72,7 @@ export const NftByAddressPage: FC<NftByAddressPageProps> = (props) => {
             <Tbody>
               {nfts?.ownedNfts.map((nft, index) => (
                 <Tr key={index}>
+                  <Td>{nft.tokenId}</Td>
                   <Td>{nft.balance}</Td>
                   <Td>
                     <Flex>
@@ -89,8 +91,12 @@ export const NftByAddressPage: FC<NftByAddressPageProps> = (props) => {
                     </Flex>
                   </Td>
                   <Td>{nft.tokenType}</Td>
-                  <Td>{truncAddress(nft.contract.address)}</Td>
-                  <Td>{truncAddress(nft.contract.contractDeployer)}</Td>
+                  <Td>
+                    <AddressLink address={nft.contract.address} />
+                  </Td>
+                  <Td>
+                    <AddressLink address={nft.contract.contractDeployer} />
+                  </Td>
                   <Td>{nft.contract.deployedBlockNumber}</Td>
                   <Td>{nft.timeLastUpdated}</Td>
                 </Tr>

@@ -20,6 +20,7 @@ import {
 } from "@chakra-ui/react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import { LinkWithRouter } from "../../components/ui/LinkWithRouter";
+import { AddressLink } from "../../components/shared/AddressLink";
 
 export const BlockDetailsPage: FC<BlockDetailsPageProps> = (props) => {
   const [blockDetails, setBlockDetails] = useState<Block | null>(null);
@@ -130,13 +131,7 @@ export const BlockDetailsPage: FC<BlockDetailsPageProps> = (props) => {
 
               <GridItem>Miner Address: </GridItem>
               <GridItem>
-                <ChakraLink
-                  as={ReactRouterLink}
-                  to={`/addresses/${blockDetails?.miner}`}
-                  color="teal.500"
-                >
-                  {blockDetails?.miner}
-                </ChakraLink>
+                <AddressLink address={blockDetails?.miner} />
               </GridItem>
 
               <GridItem>Extra Data: </GridItem>
