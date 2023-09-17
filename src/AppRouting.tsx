@@ -3,11 +3,12 @@ import { BlockDetailsPage } from "./pages/BlockDetailsPage";
 import { AddressDetailsPage } from "./pages/AddressDetailsPage";
 import { BlockTransactionsPage } from "./pages/BlockTransactionsPage";
 import { TransactionDetailsPage } from "./pages/TransactionDetailsPage";
+import { MainPage } from "./pages/MainPage";
 
 export function AppRouting() {
   return (
     <Routes>
-      <Route index element={<>Main page</>} />
+      <Route index element={<MainPage />} />
       <Route
         path="blocks/:blockHashOrBlockTag"
         element={<BlockDetailsPage />}
