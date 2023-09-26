@@ -8,6 +8,8 @@ import {
   CardBody,
   CardHeader,
   Heading,
+  Skeleton,
+  Stack,
   Table,
   TableContainer,
   Tbody,
@@ -17,7 +19,7 @@ import {
   Tr,
 } from "@chakra-ui/react";
 import { LinkWithRouter } from "../../components/ui/LinkWithRouter";
-import { truncAddress, truncTxHash } from "../../utils/truncHash";
+import { truncTxHash } from "../../utils/truncHash";
 import { AddressLink } from "../../components/shared/AddressLink";
 
 export const BlockTransactionsPage: FC<BlockTransactionsPageProps> = (
@@ -25,6 +27,7 @@ export const BlockTransactionsPage: FC<BlockTransactionsPageProps> = (
 ) => {
   const [blockWithTransactions, setBlockWithTransactions] =
     useState<BlockWithTransactions | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const { blockHashOrBlockTag = "latest" } = useParams();
 
@@ -32,6 +35,7 @@ export const BlockTransactionsPage: FC<BlockTransactionsPageProps> = (
 
   useEffect(() => {
     async function getBlockInfo(blockSearch: string) {
+      setLoading(true);
       const hash = blockSearch.toLowerCase().startsWith("0x");
       const blockNumber = parseInt(blockSearch);
       const blockHashOrTag =
@@ -39,7 +43,7 @@ export const BlockTransactionsPage: FC<BlockTransactionsPageProps> = (
       const block = await alchemy?.core.getBlockWithTransactions(
         blockHashOrTag
       );
-      console.log(block);
+      setLoading(false);
       if (!block) return;
 
       setBlockWithTransactions(block);
@@ -52,11 +56,23 @@ export const BlockTransactionsPage: FC<BlockTransactionsPageProps> = (
     <Card m={8}>
       <CardHeader>
         <Heading size="md">
-          Transactions of block #{blockWithTransactions?.number} (
-          {blockWithTransactions?.transactions[0].confirmations} confirmations)
+          Transactions of block #
+          {blockWithTransactions?.number ?? blockHashOrBlockTag} (
+          <Skeleton as="span" isLoaded={!loading} fitContent>
+            {loading && "12"}
+            {!loading && blockWithTransactions?.transactions[0].confirmations}
+          </Skeleton>{" "}
+          confirmations)
         </Heading>
       </CardHeader>
       <CardBody>
+        <Heading size="sm">
+          Transactions Count:{" "}
+          <Skeleton as="span" isLoaded={!loading} fitContent>
+            {loading && "100"}
+            {!loading && blockWithTransactions?.transactions.length}
+          </Skeleton>
+        </Heading>
         <TableContainer>
           <Table>
             <Thead>
@@ -69,37 +85,45 @@ export const BlockTransactionsPage: FC<BlockTransactionsPageProps> = (
               </Tr>
             </Thead>
             <Tbody>
-              {blockWithTransactions?.transactions.map((tx) => (
-                <Tr key={tx.hash}>
-                  <Td>
-                    <LinkWithRouter to={`/transactions/${tx.hash}`}>
-                      {truncTxHash(tx.hash)}
-                    </LinkWithRouter>
-                  </Td>
-                  <Td>
-                    <AddressLink address={tx.from} />
-                  </Td>
-                  <Td>
-                    <AddressLink address={tx.to} />
-                  </Td>
-                  <Td>
-                    {tx.value ? (
-                      <> {Utils.formatUnits(tx.value, "ether")} ETH</>
-                    ) : (
-                      "-"
-                    )}
-                  </Td>
-                  <Td>
-                    {tx.gasPrice ? (
-                      <> {Utils.formatUnits(tx.gasPrice, "gwei")} Gwei</>
-                    ) : (
-                      "-"
-                    )}
-                  </Td>
-                </Tr>
-              ))}
+              {!loading &&
+                blockWithTransactions?.transactions.map((tx) => (
+                  <Tr key={tx.hash}>
+                    <Td>
+                      <LinkWithRouter to={`/transactions/${tx.hash}`}>
+                        {truncTxHash(tx.hash)}
+                      </LinkWithRouter>
+                    </Td>
+                    <Td>
+                      <AddressLink address={tx.from} />
+                    </Td>
+                    <Td>
+                      <AddressLink address={tx.to} />
+                    </Td>
+                    <Td>
+                      {tx.value ? (
+                        <> {Utils.formatUnits(tx.value, "ether")} ETH</>
+                      ) : (
+                        "-"
+                      )}
+                    </Td>
+                    <Td>
+                      {tx.gasPrice ? (
+                        <> {Utils.formatUnits(tx.gasPrice, "gwei")} Gwei</>
+                      ) : (
+                        "-"
+                      )}
+                    </Td>
+                  </Tr>
+                ))}
             </Tbody>
           </Table>
+          {loading && (
+            <Stack>
+              {[...Array(10)].map(() => (
+                <Skeleton height="30px" />
+              ))}
+            </Stack>
+          )}
         </TableContainer>
       </CardBody>
     </Card>
