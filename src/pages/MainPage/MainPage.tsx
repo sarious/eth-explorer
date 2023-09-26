@@ -3,7 +3,7 @@ import { MainPageProps } from ".";
 import { Flex, Input } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { getNavigationPathBySearchValue } from "../../utils/getNavigationPathBySearchValue";
-import { RecenlyMinedBlockCard } from "../../components/shared/RecenlyMinedBlockCard";
+import { TotalInfoGroup } from "../../components/shared/TotalInfoGroup";
 
 export const MainPage: FC<MainPageProps> = (props) => {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -30,7 +30,7 @@ export const MainPage: FC<MainPageProps> = (props) => {
       height="100vh"
       {...props}
     >
-      <RecenlyMinedBlockCard />
+      <TotalInfoGroup />
 
       <Input
         ref={inputRef}

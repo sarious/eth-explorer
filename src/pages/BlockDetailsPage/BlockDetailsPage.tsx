@@ -4,7 +4,7 @@ import {
   Link as ReactRouterLink,
   useNavigate,
 } from "react-router-dom";
-import { Link as ChakraLink } from "@chakra-ui/react";
+import { Link as ChakraLink, Skeleton, SkeletonText } from "@chakra-ui/react";
 import { BlockDetailsPageProps } from ".";
 import { useAlchemy } from "../../providers/Alchemy.provider";
 import { BigNumber, Block } from "alchemy-sdk";
@@ -24,6 +24,7 @@ import { AddressLink } from "../../components/shared/AddressLink";
 
 export const BlockDetailsPage: FC<BlockDetailsPageProps> = (props) => {
   const [blockDetails, setBlockDetails] = useState<Block | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const { blockHashOrBlockTag = "latest" } = useParams();
 
@@ -31,11 +32,13 @@ export const BlockDetailsPage: FC<BlockDetailsPageProps> = (props) => {
 
   useEffect(() => {
     async function getBlockInfo(blockSearch: string) {
+      setLoading(true);
       const hash = blockSearch.toLowerCase().startsWith("0x");
       const blockNumber = parseInt(blockSearch);
       const blockHashOrTag =
         !isNaN(blockNumber) && !hash ? blockNumber : blockSearch;
       const block = await alchemy?.core.getBlock(blockHashOrTag);
+      setLoading(false);
       if (!block) return;
 
       setBlockDetails(block);
@@ -84,58 +87,98 @@ export const BlockDetailsPage: FC<BlockDetailsPageProps> = (props) => {
           <CardBody>
             <Grid templateColumns="1fr 3fr" gap={6}>
               <GridItem>Block Hash: </GridItem>
-              <GridItem>{blockDetails?.hash}</GridItem>
+              <GridItem>
+                <Skeleton isLoaded={!loading} fitContent={true}>
+                  {blockDetails?.hash}
+                </Skeleton>
+              </GridItem>
 
               <GridItem>Hash of Parent Block: </GridItem>
               <GridItem>
-                <ChakraLink
-                  as={ReactRouterLink}
-                  to={`/blocks/${blockDetails?.parentHash}`}
-                  color="teal.500"
-                >
-                  {blockDetails?.parentHash}
-                </ChakraLink>
+                <Skeleton isLoaded={!loading} fitContent={true}>
+                  <ChakraLink
+                    as={ReactRouterLink}
+                    to={`/blocks/${blockDetails?.parentHash}`}
+                    color="teal.500"
+                  >
+                    {blockDetails?.parentHash}
+                  </ChakraLink>
+                </Skeleton>
               </GridItem>
 
               <GridItem>Block Number: </GridItem>
-              <GridItem>{blockDetails?.number}</GridItem>
+              <GridItem>
+                <Skeleton isLoaded={!loading} fitContent={true}>
+                  {blockDetails?.number}
+                </Skeleton>
+              </GridItem>
 
               <GridItem>Timestamp: </GridItem>
-              <GridItem>{blockDetails?.timestamp}</GridItem>
+              <GridItem>
+                <Skeleton isLoaded={!loading} fitContent={true}>
+                  {blockDetails?.timestamp}
+                </Skeleton>
+              </GridItem>
 
               <GridItem>Nonce: </GridItem>
-              <GridItem>{blockDetails?.nonce}</GridItem>
+              <GridItem>
+                <Skeleton isLoaded={!loading} fitContent={true}>
+                  {blockDetails?.nonce}
+                </Skeleton>
+              </GridItem>
 
               <GridItem>Transactions: </GridItem>
               <GridItem>
-                <LinkWithRouter
-                  to={`/blocks/${blockDetails.number}/transactions`}
-                >
-                  {blockDetails?.transactions.length} transactions
-                </LinkWithRouter>
+                <Skeleton isLoaded={!loading} fitContent={true}>
+                  <LinkWithRouter
+                    to={`/blocks/${blockDetails.number}/transactions`}
+                  >
+                    {blockDetails?.transactions.length} transactions
+                  </LinkWithRouter>
+                </Skeleton>
               </GridItem>
 
               <GridItem>Difficulty: </GridItem>
-              <GridItem>{blockDetails?.difficulty}</GridItem>
+              <GridItem>
+                <Skeleton isLoaded={!loading} fitContent={true}>
+                  {blockDetails?.difficulty}
+                </Skeleton>
+              </GridItem>
 
               <GridItem>Gas Limit: </GridItem>
-              <GridItem>{toNumberOrUndefined(blockDetails?.gasLimit)}</GridItem>
+              <GridItem>
+                <Skeleton isLoaded={!loading} fitContent={true}>
+                  {toNumberOrUndefined(blockDetails?.gasLimit)}
+                </Skeleton>
+              </GridItem>
 
               <GridItem>Gas Used: </GridItem>
-              <GridItem>{toNumberOrUndefined(blockDetails?.gasUsed)}</GridItem>
+              <GridItem>
+                <Skeleton isLoaded={!loading} fitContent={true}>
+                  {toNumberOrUndefined(blockDetails?.gasUsed)}
+                </Skeleton>
+              </GridItem>
 
               <GridItem>Base Fee Per Gas: </GridItem>
               <GridItem>
-                {toNumberOrUndefined(blockDetails?.baseFeePerGas)} wei
+                <Skeleton isLoaded={!loading} fitContent={true}>
+                  {toNumberOrUndefined(blockDetails?.baseFeePerGas)} wei
+                </Skeleton>
               </GridItem>
 
               <GridItem>Miner Address: </GridItem>
               <GridItem>
-                <AddressLink address={blockDetails?.miner} />
+                <Skeleton isLoaded={!loading} fitContent={true}>
+                  <AddressLink address={blockDetails?.miner} />
+                </Skeleton>
               </GridItem>
 
               <GridItem>Extra Data: </GridItem>
-              <GridItem>{blockDetails?.extraData}</GridItem>
+              <GridItem>
+                <Skeleton isLoaded={!loading} fitContent={true}>
+                  {blockDetails?.extraData}
+                </Skeleton>
+              </GridItem>
             </Grid>
           </CardBody>
         </Card>
