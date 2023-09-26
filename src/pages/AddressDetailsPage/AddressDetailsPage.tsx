@@ -1,6 +1,12 @@
-import { FC, useEffect, useState } from "react";
+import { FC } from "react";
 import { AddressDetailsPageProps } from ".";
-import { useParams, Link as ReactRouterLink } from "react-router-dom";
+import {
+  useParams,
+  Link as ReactRouterLink,
+  useNavigate,
+  Outlet,
+  Link,
+} from "react-router-dom";
 import { useAlchemy } from "../../providers/Alchemy.provider";
 import {
   Table,
@@ -13,71 +19,70 @@ import {
   Image,
   Box,
   Link as ChakraLink,
+  CardHeader,
+  CardBody,
+  Card,
+  Heading,
+  Flex,
+  Button,
+  Tabs,
+  Tab,
+  TabList,
+  Skeleton,
+  SkeletonText,
+  Text,
 } from "@chakra-ui/react";
-import { GetTokensForOwnerResponse } from "alchemy-sdk";
-import { truncString } from "../../utils/truncHash";
+import { TokenMetadataResponse } from "alchemy-sdk";
+import { TokenMetadata } from "../../components/shared/TokenMetadata";
+import { useAlchemyCall } from "../../hooks/useAlchemyCall";
 
 export const AddressDetailsPage: FC<AddressDetailsPageProps> = (props) => {
-  const [tokensResponse, setTokensResponse] =
-    useState<GetTokensForOwnerResponse | null>(null);
-
   const { address = "" } = useParams();
+  console.log("AddressDetailsPage", address);
 
   const alchemy = useAlchemy();
 
-  useEffect(() => {
-    async function getAddressInfo(address: string) {
-      const tokensResponse = await alchemy?.core.getTokensForOwner(address);
-      if (!tokensResponse) return;
+  const { data: tokensResponse, loading: tokensLoading } = useAlchemyCall(
+    alchemy?.core.getTokensForOwner(address)
+  );
 
-      setTokensResponse(tokensResponse);
-    }
+  const { data: isContract, loading: isContractLoading } = useAlchemyCall(
+    alchemy?.core.isContractAddress(address)
+  );
 
-    getAddressInfo(address);
-  }, [alchemy?.core, address]);
+  const { data: balance, loading: balanceLoading } = useAlchemyCall(
+    alchemy?.core.getBalance(address)
+  );
+
+  const navigate = useNavigate();
+  const onNftHoldingsClick = () => {
+    navigate("nft/");
+  };
 
   return (
-    <TableContainer m={8}>
-      <Table size="sm">
-        <Thead>
-          <Tr>
-            <Th>Token</Th>
-            <Th>Balance</Th>
-            <Th>Contract Address</Th>
-          </Tr>
-        </Thead>
-        <Tbody>
-          {tokensResponse?.tokens.map((token) => (
-            <Tr key={token.contractAddress}>
-              <Td display="flex" alignItems="center" gap={4}>
-                {token?.logo ? (
-                  <Image
-                    src={token?.logo}
-                    borderRadius="full"
-                    objectFit="cover"
-                    boxSize={6}
-                  />
-                ) : (
-                  <Box borderRadius="full" boxSize={6} bgColor={"grey"} />
-                )}{" "}
-                {truncString(token.name, 20, "end")}
-              </Td>
-              <Td>
-                {token.balance} {token.symbol}
-              </Td>
-              <Td>
-                <ChakraLink
-                  as={ReactRouterLink}
-                  to={`/tokens/${token.contractAddress}`}
-                  color="teal.500"
-                >
-                  {token.contractAddress}
-                </ChakraLink>
-              </Td>
-            </Tr>
-          ))}
-        </Tbody>
-      </Table>
-    </TableContainer>
+    <Card m={8}>
+      <CardHeader>
+        <Heading as={Flex} size="md" direction="row" gap="4">
+          <Skeleton isLoaded={!isContractLoading}>
+            {isContract ? "Contract" : "Address"}{" "}
+          </Skeleton>
+          <Text>{address}</Text>
+        </Heading>
+      </CardHeader>
+      <CardBody as={Flex} direction="column">
+        <Box>
+          ETH Balance:{" "}
+          <>
+            <Skeleton isLoaded={!balanceLoading}>
+              <Box>
+                {!balanceLoading && <>{balance?.toString() ?? "N/a"} wei</>}
+              </Box>
+            </Skeleton>
+          </>
+        </Box>
+        <TokenMetadata address={address} />
+        <Button onClick={onNftHoldingsClick}>NFTs Holdings</Button>
+      </CardBody>
+    </Card>
   );
 };

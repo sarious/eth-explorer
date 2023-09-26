@@ -13,7 +13,6 @@ import { useAlchemy } from "../../providers/Alchemy.provider";
 import { useParams } from "react-router-dom";
 import { TransactionResponse } from "alchemy-sdk";
 import { toNumberOrUndefined } from "../BlockDetailsPage";
-import { LinkWithRouter } from "../../components/ui/LinkWithRouter";
 import { BlockLink } from "../../components/shared/BlockLink";
 import { AddressLink } from "../../components/shared/AddressLink";
 

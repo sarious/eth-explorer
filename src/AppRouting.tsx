@@ -1,10 +1,11 @@
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import { BlockDetailsPage } from "./pages/BlockDetailsPage";
 import { AddressDetailsPage } from "./pages/AddressDetailsPage";
 import { BlockTransactionsPage } from "./pages/BlockTransactionsPage";
 import { TransactionDetailsPage } from "./pages/TransactionDetailsPage";
 import { MainPage } from "./pages/MainPage";
 import { NftByAddressPage } from "./pages/NftByAddressPage";
+import { NftDetailsPage } from "./pages/NftDetailsPage";
 
 export function AppRouting() {
   return (
@@ -19,8 +20,16 @@ export function AppRouting() {
         element={<BlockTransactionsPage />}
       />
       <Route path="transactions/:txHash" element={<TransactionDetailsPage />} />
-      <Route path="addresses/:address" element={<AddressDetailsPage />} />
+      <Route path="addresses/:address" element={<AddressDetailsPage />}>
+        {/* <Route index element={<Navigate to="tokens" replace />} /> */}
+        {/* <Route index path="tokens" element={<TokenHoldingsByAddressPage />} /> */}
+      </Route>
       <Route path="addresses/:address/nft" element={<NftByAddressPage />} />
+
+      <Route
+        path="nft/:contractAddress/:tokenId"
+        element={<NftDetailsPage />}
+      />
     </Routes>
   );
 }
