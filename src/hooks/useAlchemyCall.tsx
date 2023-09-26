@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 export function useAlchemyCall<T>(apiCall: Promise<T> | undefined) {
   const [loading, setLoading] = useState(false);
@@ -25,4 +25,33 @@ export function useAlchemyCall<T>(apiCall: Promise<T> | undefined) {
   }, []);
 
   return { data, loading, error };
+}
+
+export function useAlchemyApi<Q, T>(
+  p: (query: Q) => Promise<T>
+): {
+  data: T | undefined;
+  loading: boolean;
+  error: Error | undefined;
+  fetch: (query: Q) => Promise<void>;
+} {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<Error | undefined>(undefined);
+  const [data, setData] = useState<T | undefined>(undefined);
+
+  const fetch = useCallback(async (query: Q) => {
+    if (loading) return;
+    setLoading(true);
+
+    try {
+      const result = await p(query);
+      setLoading(false);
+      setData(result);
+    } catch (error) {
+      setLoading(false);
+      setError(error instanceof Error ? error : new Error(`${error}`));
+    }
+  }, []);
+
+  return { data, loading, error, fetch };
 }
