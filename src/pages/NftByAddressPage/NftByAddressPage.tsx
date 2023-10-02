@@ -57,10 +57,10 @@ export const NftByAddressPage: FC<NftByAddressPageProps> = (props) => {
     <>
       <Text>Total Count: {nfts?.totalCount}</Text>
       <TableContainer>
-        <Table variant="striped" colorScheme="gray">
+        <Table size="sm" variant="striped" colorScheme="gray">
           <Thead>
             <Tr>
-              <Th>Token Id</Th>
+              <Th maxWidth={70}>Token Id</Th>
               <Th>Qty</Th>
               <Th>Title</Th>
               <Th>Type</Th>
@@ -73,7 +73,9 @@ export const NftByAddressPage: FC<NftByAddressPageProps> = (props) => {
           <Tbody>
             {nfts?.ownedNfts.map((nft, index) => (
               <Tr key={index}>
-                <Td>{nft.tokenId}</Td>
+                <Td maxWidth={70} overflow="hidden" textOverflow="ellipsis">
+                  {nft.tokenId}
+                </Td>
                 <Td>{nft.balance}</Td>
                 <Td
                   onClick={() =>

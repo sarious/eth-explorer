@@ -31,7 +31,7 @@ export const TokenHoldingsByAddressPage: FC<TokenHoldingsByAddressPageProps> = (
   return (
     <>
       <TableContainer>
-        <Table size="sm">
+        <Table size="sm" variant="striped" colorScheme="gray">
           <Thead>
             <Tr>
               <Th>Token</Th>

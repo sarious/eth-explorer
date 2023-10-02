@@ -31,17 +31,8 @@ function tokenMetadataExist(
 
 export const AddressDetailsPage: FC<AddressDetailsPageProps> = (props) => {
   const { address = "" } = useParams();
-  console.log("AddressDetailsPage", address);
 
   const alchemy = useAlchemy();
-
-  const { data: tokensResponse, loading: tokensLoading } = useAlchemyCall(
-    alchemy?.core.getTokensForOwner(address)
-  );
-
-  const { data: isContract, loading: isContractLoading } = useAlchemyCall(
-    alchemy?.core.isContractAddress(address)
-  );
 
   const { data: balance, loading: balanceLoading } = useAlchemyCall(
     alchemy?.core.getBalance(address)
@@ -65,73 +56,45 @@ export const AddressDetailsPage: FC<AddressDetailsPageProps> = (props) => {
     ? Utils.formatUnits(balance, "ether") + " ETH"
     : "N/A";
 
-  const navigate = useNavigate();
-  const onNftHoldingsClick = () => {
-    navigate("nft/");
-  };
-  const onTokensHoldingsClick = () => {
-    navigate("tokens/");
-  };
-
   return (
-    <Card m={8}>
-      <CardHeader>
-        <Heading as="span" size="md">
-          <Skeleton as="span" isLoaded={!isContractLoading}>
-            {isContract ? "Contract" : "Address"}{" "}
-          </Skeleton>
-          {address}
-        </Heading>
-      </CardHeader>
-      <CardBody as={Flex} direction="column">
-        <TableContainer>
-          <Table>
-            <Tbody>
-              <Tr>
-                <Td>ETH Balance</Td>
-                <Td>
-                  <Skeleton as="span" isLoaded={!balanceLoading}>
-                    {!balanceLoading && balanceStr}
-                  </Skeleton>
-                </Td>
-              </Tr>
+    <TableContainer>
+      <Table>
+        <Tbody>
+          <Tr>
+            <Td>ETH Balance</Td>
+            <Td>
+              <Skeleton as="span" isLoaded={!balanceLoading}>
+                {balanceLoading && "0.1234567891234567890 ETH"}
+                {!balanceLoading && balanceStr}
+              </Skeleton>
+            </Td>
+          </Tr>
 
-              <Tr>
-                <Td>Token Details</Td>
-                <Td>
-                  <Skeleton as="span" isLoaded={!metadataLoading}>
-                    {metadataExist && (
-                      <Flex>
-                        {tokenMetadata?.logo ? (
-                          <Image
-                            src={tokenMetadata?.logo}
-                            borderRadius="full"
-                            objectFit="cover"
-                            boxSize={6}
-                          />
-                        ) : (
-                          <Box
-                            borderRadius="full"
-                            boxSize={6}
-                            bgColor={"grey"}
-                          />
-                        )}{" "}
-                        {tokenMetadata?.name} ({tokenMetadata?.symbol})
-                      </Flex>
-                    )}
-                    {!metadataExist && <>No token related to this address</>}
-                  </Skeleton>
-                </Td>
-              </Tr>
-            </Tbody>
-          </Table>
-        </TableContainer>
-
-        <Flex mt={4} gap={4}>
-          <Button onClick={onTokensHoldingsClick}>Token Holdings</Button>
-          <Button onClick={onNftHoldingsClick}>NFTs Holdings</Button>
-        </Flex>
-      </CardBody>
-    </Card>
+          <Tr>
+            <Td>Token Details</Td>
+            <Td>
+              <Skeleton as="span" isLoaded={!metadataLoading}>
+                {metadataExist && (
+                  <Flex>
+                    {tokenMetadata?.logo ? (
+                      <Image
+                        src={tokenMetadata?.logo}
+                        borderRadius="full"
+                        objectFit="cover"
+                        boxSize={6}
+                      />
+                    ) : (
+                      <Box borderRadius="full" boxSize={6} bgColor={"grey"} />
+                    )}{" "}
+                    {tokenMetadata?.name} ({tokenMetadata?.symbol})
+                  </Flex>
+                )}
+                {!metadataExist && <>No token related to this address</>}
+              </Skeleton>
+            </Td>
+          </Tr>
+        </Tbody>
+      </Table>
+    </TableContainer>
   );
 };
