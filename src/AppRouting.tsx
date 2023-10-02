@@ -6,6 +6,7 @@ import { TransactionDetailsPage } from "./pages/TransactionDetailsPage";
 import { MainPage } from "./pages/MainPage";
 import { NftByAddressPage } from "./pages/NftByAddressPage";
 import { NftDetailsPage } from "./pages/NftDetailsPage";
+import { TokenHoldingsByAddressPage } from "./pages/TokenHoldingsByAddressPage";
 
 export function AppRouting() {
   return (
@@ -21,10 +22,15 @@ export function AppRouting() {
       />
       <Route path="transactions/:txHash" element={<TransactionDetailsPage />} />
       <Route path="addresses/:address" element={<AddressDetailsPage />}>
-        {/* <Route index element={<Navigate to="tokens" replace />} /> */}
-        {/* <Route index path="tokens" element={<TokenHoldingsByAddressPage />} /> */}
+        <Route index element={<Navigate to="details" replace />} />
+        <Route path="tokens" element={<TokenHoldingsByAddressPage />} />
+        <Route path="nfts" element={<NftByAddressPage />} />
       </Route>
-      <Route path="addresses/:address/nft" element={<NftByAddressPage />} />
+      {/* <Route path="addresses/:address/nft" element={<NftByAddressPage />} />
+      <Route
+        path="addresses/:address/tokens"
+        element={<TokenHoldingsByAddressPage />}
+      /> */}
 
       <Route
         path="nft/:contractAddress/:tokenId"
