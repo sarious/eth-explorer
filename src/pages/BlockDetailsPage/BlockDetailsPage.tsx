@@ -1,13 +1,11 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect } from "react";
 import {
   useParams,
   Link as ReactRouterLink,
   useNavigate,
 } from "react-router-dom";
-import { Link as ChakraLink, Skeleton, SkeletonText } from "@chakra-ui/react";
+import { Link as ChakraLink, Skeleton } from "@chakra-ui/react";
 import { BlockDetailsPageProps } from ".";
-import { useAlchemy } from "../../providers/Alchemy.provider";
-import { BigNumber, Block } from "alchemy-sdk";
 import {
   Card,
   CardBody,
@@ -21,52 +19,42 @@ import {
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import { LinkWithRouter } from "../../components/ui/LinkWithRouter";
 import { AddressLink } from "../../components/shared/AddressLink";
+import { useAlchemyApi } from "../../hooks/useAlchemyCall";
+import { getBlock } from "../../api/etherApi";
+import { parseHashOrTag } from "../../utils/parseHashOrTag";
+import { toNumberOrUndefined } from "../../utils/toNumberOrUndefined";
 
 export const BlockDetailsPage: FC<BlockDetailsPageProps> = (props) => {
-  const [blockDetails, setBlockDetails] = useState<Block | null>(null);
-  const [loading, setLoading] = useState(false);
-
   const { blockHashOrBlockTag = "latest" } = useParams();
 
-  const alchemy = useAlchemy();
+  const { loading, data, fetch } = useAlchemyApi((blockSearch: string) =>
+    getBlock(parseHashOrTag(blockSearch))
+  );
 
   useEffect(() => {
-    async function getBlockInfo(blockSearch: string) {
-      setLoading(true);
-      const hash = blockSearch.toLowerCase().startsWith("0x");
-      const blockNumber = parseInt(blockSearch);
-      const blockHashOrTag =
-        !isNaN(blockNumber) && !hash ? blockNumber : blockSearch;
-      const block = await alchemy?.core.getBlock(blockHashOrTag);
-      setLoading(false);
-      if (!block) return;
-
-      setBlockDetails(block);
-    }
-
-    getBlockInfo(blockHashOrBlockTag);
-  }, [alchemy?.core, blockHashOrBlockTag]);
+    fetch(blockHashOrBlockTag);
+  }, [blockHashOrBlockTag]);
 
   const navigate = useNavigate();
   const navigateToPrevBlock = () => {
-    if (blockDetails?.number && blockDetails?.number > 0) {
-      navigate(`/blocks/${blockDetails?.number - 1}`);
+    if (data?.number && data?.number > 0) {
+      navigate(`/blocks/${data?.number - 1}`);
     }
   };
 
   const navigateToNextBlock = () => {
-    if (blockDetails) {
-      navigate(`/blocks/${blockDetails?.number + 1}`);
+    if (data) {
+      navigate(`/blocks/${data?.number + 1}`);
     }
   };
 
   return (
     <>
-      {blockDetails && (
+      {
         <Card m={8}>
           <CardHeader>
             <Flex>
-              <Heading size="md">Block #{blockDetails?.number}</Heading>
+              <Heading size="md">Block #{data?.number}</Heading>
 
               <IconButton
                 aria-label="Select previous block"
@@ -89,7 +77,7 @@ export const BlockDetailsPage: FC<BlockDetailsPageProps> = (props) => {
               <GridItem>Block Hash: </GridItem>
               <GridItem>
                 <Skeleton isLoaded={!loading} fitContent={true}>
-                  {blockDetails?.hash}
+                  {data?.hash}
                 </Skeleton>
               </GridItem>
 
@@ -98,10 +86,10 @@ export const BlockDetailsPage: FC<BlockDetailsPageProps> = (props) => {
                 <Skeleton isLoaded={!loading} fitContent={true}>
                   <ChakraLink
                     as={ReactRouterLink}
-                    to={`/blocks/${blockDetails?.parentHash}`}
+                    to={`/blocks/${data?.parentHash}`}
                     color="teal.500"
                   >
-                    {blockDetails?.parentHash}
+                    {data?.parentHash}
                   </ChakraLink>
                 </Skeleton>
               </GridItem>
@@ -109,86 +97,80 @@ export const BlockDetailsPage: FC<BlockDetailsPageProps> = (props) => {
               <GridItem>Block Number: </GridItem>
               <GridItem>
                 <Skeleton isLoaded={!loading} fitContent={true}>
-                  {blockDetails?.number}
+                  {data?.number}
                 </Skeleton>
               </GridItem>
 
               <GridItem>Timestamp: </GridItem>
               <GridItem>
                 <Skeleton isLoaded={!loading} fitContent={true}>
-                  {blockDetails?.timestamp}
+                  {data?.timestamp}
                 </Skeleton>
               </GridItem>
 
               <GridItem>Nonce: </GridItem>
               <GridItem>
                 <Skeleton isLoaded={!loading} fitContent={true}>
-                  {blockDetails?.nonce}
+                  {data?.nonce}
                 </Skeleton>
               </GridItem>
 
               <GridItem>Transactions: </GridItem>
               <GridItem>
                 <Skeleton isLoaded={!loading} fitContent={true}>
-                  <LinkWithRouter
-                    to={`/blocks/${blockDetails.number}/transactions`}
-                  >
-                    {blockDetails?.transactions.length} transactions
-                  </LinkWithRouter>
+                  {data && (
+                    <LinkWithRouter to={`/blocks/${data.number}/transactions`}>
+                      {data?.transactions.length} transactions
+                    </LinkWithRouter>
+                  )}
                 </Skeleton>
               </GridItem>
 
               <GridItem>Difficulty: </GridItem>
               <GridItem>
                 <Skeleton isLoaded={!loading} fitContent={true}>
-                  {blockDetails?.difficulty}
+                  {data?.difficulty}
                 </Skeleton>
               </GridItem>
 
               <GridItem>Gas Limit: </GridItem>
               <GridItem>
                 <Skeleton isLoaded={!loading} fitContent={true}>
-                  {toNumberOrUndefined(blockDetails?.gasLimit)}
+                  {toNumberOrUndefined(data?.gasLimit)}
                 </Skeleton>
               </GridItem>
 
               <GridItem>Gas Used: </GridItem>
               <GridItem>
                 <Skeleton isLoaded={!loading} fitContent={true}>
-                  {toNumberOrUndefined(blockDetails?.gasUsed)}
+                  {toNumberOrUndefined(data?.gasUsed)}
                 </Skeleton>
               </GridItem>
 
               <GridItem>Base Fee Per Gas: </GridItem>
               <GridItem>
                 <Skeleton isLoaded={!loading} fitContent={true}>
-                  {toNumberOrUndefined(blockDetails?.baseFeePerGas)} wei
+                  {toNumberOrUndefined(data?.baseFeePerGas)} wei
                 </Skeleton>
               </GridItem>
 
               <GridItem>Miner Address: </GridItem>
               <GridItem>
                 <Skeleton isLoaded={!loading} fitContent={true}>
-                  <AddressLink address={blockDetails?.miner} />
+                  <AddressLink address={data?.miner} />
                 </Skeleton>
               </GridItem>
 
               <GridItem>Extra Data: </GridItem>
               <GridItem>
                 <Skeleton isLoaded={!loading} fitContent={true}>
-                  {blockDetails?.extraData}
+                  {data?.extraData}
                 </Skeleton>
               </GridItem>
             </Grid>
           </CardBody>
         </Card>
-      )}
+      }
     </>
   );
 };
-
-export function toNumberOrUndefined(value: BigNumber | null | undefined) {
-  if (value === null || value === undefined) return null;
-
-  return value.toNumber();
-}

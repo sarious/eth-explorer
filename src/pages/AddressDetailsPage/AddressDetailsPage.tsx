@@ -1,7 +1,6 @@
 import { FC, useEffect } from "react";
 import { AddressDetailsPageProps } from ".";
-import { useParams, useNavigate } from "react-router-dom";
-import { useAlchemy } from "../../providers/Alchemy.provider";
+import { useParams } from "react-router-dom";
 import {
   Table,
   TableContainer,
@@ -10,17 +9,13 @@ import {
   Tr,
   Image,
   Box,
-  CardHeader,
-  CardBody,
-  Card,
-  Heading,
   Flex,
-  Button,
   Skeleton,
 } from "@chakra-ui/react";
 import { TokenMetadataResponse } from "alchemy-sdk";
-import { useAlchemyApi, useAlchemyCall } from "../../hooks/useAlchemyCall";
+import { useAlchemyApi } from "../../hooks/useAlchemyCall";
 import { Utils } from "alchemy-sdk";
+import { getBalance, getTokenMetadata } from "../../api/etherApi";
 
 function tokenMetadataExist(
   tokenMetadata: TokenMetadataResponse | undefined
@@ -32,23 +27,22 @@ function tokenMetadataExist(
 export const AddressDetailsPage: FC<AddressDetailsPageProps> = (props) => {
   const { address = "" } = useParams();
 
-  const alchemy = useAlchemy();
-
-  const { data: balance, loading: balanceLoading } = useAlchemyCall(
-    alchemy?.core.getBalance(address)
-  );
+  const {
+    data: balance,
+    loading: balanceLoading,
+    fetch: fetchBalance,
+  } = useAlchemyApi(getBalance);
 
   const {
     data: tokenMetadata,
     loading: metadataLoading,
     fetch: fetchMetadata,
-  } = useAlchemyApi((address: string) =>
-    alchemy?.core.getTokenMetadata(address)
-  );
+  } = useAlchemyApi(getTokenMetadata);
 
   useEffect(() => {
     fetchMetadata(address);
-  }, [fetchMetadata, address]);
+    fetchBalance(address);
+  }, [address]);
 
   const metadataExist = tokenMetadataExist(tokenMetadata);
 
@@ -89,7 +83,7 @@ export const AddressDetailsPage: FC<AddressDetailsPageProps> = (props) => {
                     {tokenMetadata?.name} ({tokenMetadata?.symbol})
                   </Flex>
                 )}
-                {!metadataExist && <>No token related to this address</>}
+                {!metadataExist && <>This is not contract of token.</>}
               </Skeleton>
             </Td>
           </Tr>

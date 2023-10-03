@@ -1,14 +1,8 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect } from "react";
 import { NftByAddressPageProps } from ".";
-import { useAlchemy } from "../../providers/Alchemy.provider";
 import { useNavigate, useParams } from "react-router-dom";
-import { OwnedNftsResponse } from "alchemy-sdk";
 import {
-  Card,
-  CardBody,
-  CardHeader,
   Flex,
-  Heading,
   Table,
   TableContainer,
   Tbody,
@@ -19,39 +13,23 @@ import {
   Tr,
 } from "@chakra-ui/react";
 import { AddressLink } from "../../components/shared/AddressLink";
+import { LoadingTable } from "../../components/ui/LoadingTable";
+import { useAlchemyApi } from "../../hooks/useAlchemyCall";
+import { getNftsForOwner } from "../../api/etherApi";
 
 export const NftByAddressPage: FC<NftByAddressPageProps> = (props) => {
-  const [nfts, setNFTs] = useState<OwnedNftsResponse>();
-  const [loading, setLoading] = useState(true);
-
-  const alchemy = useAlchemy();
   const { address = "" } = useParams();
 
+  const { data: nfts, loading, fetch } = useAlchemyApi(getNftsForOwner);
+
   useEffect(() => {
-    const fetchNFTsForAddress = async () => {
-      try {
-        const nftCollection = await alchemy?.nft.getNftsForOwner(address);
-        if (!nftCollection) return;
-
-        setNFTs(nftCollection);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching NFTs for address:", error);
-        setLoading(false);
-      }
-    };
-
-    fetchNFTsForAddress();
-  }, [address, alchemy?.nft]);
+    fetch(address);
+  }, [address]);
 
   const navigate = useNavigate();
   const nftDetailsClick = (contractAddress: string, tokenId: string) => {
     navigate(`/nft/${contractAddress}/${tokenId}`);
   };
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
 
   return (
     <>
@@ -111,6 +89,8 @@ export const NftByAddressPage: FC<NftByAddressPageProps> = (props) => {
           </Tbody>
         </Table>
       </TableContainer>
+
+      {loading && <LoadingTable />}
     </>
   );
 };

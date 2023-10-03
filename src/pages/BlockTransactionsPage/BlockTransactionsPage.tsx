@@ -1,15 +1,13 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect } from "react";
 import { BlockTransactionsPageProps } from ".";
 import { useParams } from "react-router-dom";
-import { useAlchemy } from "../../providers/Alchemy.provider";
-import { BlockWithTransactions, Utils } from "alchemy-sdk";
+import { Utils } from "alchemy-sdk";
 import {
   Card,
   CardBody,
   CardHeader,
   Heading,
   Skeleton,
-  Stack,
   Table,
   TableContainer,
   Tbody,
@@ -21,46 +19,30 @@ import {
 import { LinkWithRouter } from "../../components/ui/LinkWithRouter";
 import { truncTxHash } from "../../utils/truncHash";
 import { AddressLink } from "../../components/shared/AddressLink";
+import { useAlchemyApi } from "../../hooks/useAlchemyCall";
+import { getBlockWithTransactions } from "../../api/etherApi";
+import { parseHashOrTag } from "../../utils/parseHashOrTag";
+import { LoadingTable } from "../../components/ui/LoadingTable";
 
-export const BlockTransactionsPage: FC<BlockTransactionsPageProps> = (
-  props
-) => {
-  const [blockWithTransactions, setBlockWithTransactions] =
-    useState<BlockWithTransactions | null>(null);
-  const [loading, setLoading] = useState(false);
-
+export const BlockTransactionsPage: FC<BlockTransactionsPageProps> = () => {
   const { blockHashOrBlockTag = "latest" } = useParams();
 
-  const alchemy = useAlchemy();
+  const { loading, data, fetch } = useAlchemyApi((blockSearch: string) =>
+    getBlockWithTransactions(parseHashOrTag(blockSearch))
+  );
 
   useEffect(() => {
-    async function getBlockInfo(blockSearch: string) {
-      setLoading(true);
-      const hash = blockSearch.toLowerCase().startsWith("0x");
-      const blockNumber = parseInt(blockSearch);
-      const blockHashOrTag =
-        !isNaN(blockNumber) && !hash ? blockNumber : blockSearch;
-      const block = await alchemy?.core.getBlockWithTransactions(
-        blockHashOrTag
-      );
-      setLoading(false);
-      if (!block) return;
-
-      setBlockWithTransactions(block);
-    }
-
-    getBlockInfo(blockHashOrBlockTag);
-  }, [alchemy?.core, blockHashOrBlockTag]);
+    fetch(blockHashOrBlockTag);
+  }, [blockHashOrBlockTag]);
 
   return (
     <Card m={8}>
       <CardHeader>
         <Heading size="md">
-          Transactions of block #
-          {blockWithTransactions?.number ?? blockHashOrBlockTag} (
+          Transactions of block #{data?.number ?? blockHashOrBlockTag} (
           <Skeleton as="span" isLoaded={!loading} fitContent>
             {loading && "12"}
-            {!loading && blockWithTransactions?.transactions[0].confirmations}
+            {!loading && data?.transactions[0].confirmations}
           </Skeleton>{" "}
           confirmations)
         </Heading>
@@ -70,7 +52,7 @@ export const BlockTransactionsPage: FC<BlockTransactionsPageProps> = (
           Transactions Count:{" "}
           <Skeleton as="span" isLoaded={!loading} fitContent>
             {loading && "100"}
-            {!loading && blockWithTransactions?.transactions.length}
+            {!loading && data?.transactions.length}
           </Skeleton>
         </Heading>
         <TableContainer>
@@ -86,7 +68,7 @@ export const BlockTransactionsPage: FC<BlockTransactionsPageProps> = (
             </Thead>
             <Tbody>
               {!loading &&
-                blockWithTransactions?.transactions.map((tx) => (
+                data?.transactions.map((tx) => (
                   <Tr key={tx.hash}>
                     <Td>
                       <LinkWithRouter to={`/transactions/${tx.hash}`}>
@@ -117,13 +99,8 @@ export const BlockTransactionsPage: FC<BlockTransactionsPageProps> = (
                 ))}
             </Tbody>
           </Table>
-          {loading && (
-            <Stack>
-              {[...Array(10)].map(() => (
-                <Skeleton height="30px" />
-              ))}
-            </Stack>
-          )}
+
+          {loading && <LoadingTable />}
         </TableContainer>
       </CardBody>
     </Card>

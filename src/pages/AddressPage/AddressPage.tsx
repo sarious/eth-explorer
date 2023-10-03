@@ -1,4 +1,4 @@
-import { FC, useEffect } from "react";
+import { FC } from "react";
 import { AddressPageProps } from ".";
 import {
   Card,
@@ -7,47 +7,30 @@ import {
   Skeleton,
   CardBody,
   Flex,
-  TableContainer,
-  Table,
-  Tbody,
-  Tr,
-  Td,
-  Button,
-  Image,
   Tabs,
   TabList,
   Tab,
 } from "@chakra-ui/react";
-import { Utils } from "alchemy-sdk";
-import { useParams, useNavigate, Outlet, Link } from "react-router-dom";
-import { useAlchemyCall, useAlchemyApi } from "../../hooks/useAlchemyCall";
-import { useAlchemy } from "../../providers/Alchemy.provider";
+import { useParams, Outlet, Link } from "react-router-dom";
+import { useAlchemyApi } from "../../hooks/useAlchemyCall";
+import { isContractAddress } from "../../api/etherApi";
 
-export const AddressPage: FC<AddressPageProps> = (props) => {
+export const AddressPage: FC<AddressPageProps> = () => {
   const { address = "" } = useParams();
 
-  const alchemy = useAlchemy();
-
-  const { data: isContract, loading: isContractLoading } = useAlchemyCall(
-    alchemy?.core.isContractAddress(address)
-  );
+  const { data: isContract, loading } = useAlchemyApi(isContractAddress);
 
   return (
     <Card m={8}>
       <CardHeader>
         <Heading as="span" size="md">
-          <Skeleton as="span" isLoaded={!isContractLoading}>
+          <Skeleton as="span" isLoaded={!loading}>
             {isContract ? "Contract" : "Address"}{" "}
           </Skeleton>
           {address}
         </Heading>
       </CardHeader>
       <CardBody as={Flex} direction="column">
-        {/* <Flex mt={4} gap={4}>
-          <Button onClick={onTokensHoldingsClick}>Token Holdings</Button>
-          <Button onClick={onNftHoldingsClick}>NFTs Holdings</Button>
-        </Flex> */}
-
         <Tabs mt={4}>
           <TabList>
             <Tab as={Link} to="details">

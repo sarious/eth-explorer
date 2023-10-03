@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { TokenHoldingsByAddressPageProps } from ".";
 import {
   Table,
@@ -13,20 +13,21 @@ import {
   Link as ChakraLink,
 } from "@chakra-ui/react";
 import { Link, useParams } from "react-router-dom";
-import { useAlchemy } from "../../providers/Alchemy.provider";
 import { truncString } from "../../utils/truncHash";
-import { useAlchemyCall } from "../../hooks/useAlchemyCall";
+import { useAlchemyApi } from "../../hooks/useAlchemyCall";
+import { getTokensForOwner } from "../../api/etherApi";
+import { LoadingTable } from "../../components/ui/LoadingTable";
 
-export const TokenHoldingsByAddressPage: FC<TokenHoldingsByAddressPageProps> = (
-  props
-) => {
+export const TokenHoldingsByAddressPage: FC<
+  TokenHoldingsByAddressPageProps
+> = () => {
   const { address = "" } = useParams();
 
-  const alchemy = useAlchemy();
+  const { data, loading, fetch } = useAlchemyApi(getTokensForOwner);
 
-  const { data: tokensResponse, loading: tokensLoading } = useAlchemyCall(
-    alchemy?.core.getTokensForOwner(address)
-  );
+  useEffect(() => {
+    fetch(address);
+  }, [address]);
 
   return (
     <>
@@ -40,7 +41,7 @@ export const TokenHoldingsByAddressPage: FC<TokenHoldingsByAddressPageProps> = (
             </Tr>
           </Thead>
           <Tbody>
-            {tokensResponse?.tokens.map((token) => (
+            {data?.tokens.map((token) => (
               <Tr key={token.contractAddress}>
                 <Td display="flex" alignItems="center" gap={4}>
                   {token?.logo ? (
@@ -72,6 +73,8 @@ export const TokenHoldingsByAddressPage: FC<TokenHoldingsByAddressPageProps> = (
           </Tbody>
         </Table>
       </TableContainer>
+
+      {loading && <LoadingTable />}
     </>
   );
 };

@@ -1,9 +1,9 @@
 import { FC } from "react";
 import { TokenMetadataProps } from ".";
-import { useAlchemy } from "../../../providers/Alchemy.provider";
 import { Box, Flex, Heading, Image } from "@chakra-ui/react";
-import { useAlchemyCall } from "../../../hooks/useAlchemyCall";
+import { useAlchemyApi } from "../../../hooks/useAlchemyCall";
 import { TokenMetadataResponse } from "alchemy-sdk";
+import { getTokenMetadata } from "../../../api/etherApi";
 
 function tokenMetadataExist(
   tokenMetadata: TokenMetadataResponse | undefined
@@ -13,10 +13,7 @@ function tokenMetadataExist(
 }
 
 export const TokenMetadata: FC<TokenMetadataProps> = ({ address }) => {
-  const alchemy = useAlchemy();
-  const { data: tokenMetadata, loading } = useAlchemyCall(
-    alchemy?.core.getTokenMetadata(address)
-  );
+  const { data: tokenMetadata, loading } = useAlchemyApi(getTokenMetadata);
 
   const metadataExist = tokenMetadataExist(tokenMetadata);
 

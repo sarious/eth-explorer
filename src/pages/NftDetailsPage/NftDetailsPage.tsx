@@ -1,10 +1,7 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect } from "react";
 import { NftDetailsPageProps } from ".";
-import { useAlchemy } from "../../providers/Alchemy.provider";
 import { useParams } from "react-router-dom";
-import { Nft } from "alchemy-sdk";
 import {
-  Box,
   Card,
   Flex,
   Heading,
@@ -19,32 +16,17 @@ import {
   Wrap,
 } from "@chakra-ui/react";
 import { ExternalLinkIcon } from "@chakra-ui/icons";
+import { useAlchemyApi } from "../../hooks/useAlchemyCall";
+import { getNftMetadata } from "../../api/etherApi";
 
 export const NftDetailsPage: FC<NftDetailsPageProps> = (props) => {
-  const [nft, setNftMetadata] = useState<Nft | undefined>();
-  const [loading, setLoading] = useState(true);
-
-  const alchemy = useAlchemy();
   const { contractAddress = "", tokenId = "" } = useParams();
 
+  const { data: nft, loading, fetch } = useAlchemyApi(getNftMetadata);
+
   useEffect(() => {
-    const fetchNFTMetadata = async () => {
-      try {
-        const nftMetadata = await alchemy?.nft.getNftMetadata(
-          contractAddress,
-          1
-        );
-
-        setNftMetadata(nftMetadata);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching NFT metadata:", error);
-        setLoading(false);
-      }
-    };
-
-    fetchNFTMetadata();
-  }, [alchemy?.nft, contractAddress, tokenId]);
+    fetch(contractAddress, tokenId);
+  }, [contractAddress, tokenId]);
 
   // TODO: calculate rarity with alchemy?.nft.computeRarity
 
