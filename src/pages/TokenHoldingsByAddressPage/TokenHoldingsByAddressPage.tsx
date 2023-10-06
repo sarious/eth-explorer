@@ -17,6 +17,7 @@ import { truncString } from "../../utils/truncHash";
 import { useAlchemyApi } from "../../hooks/useAlchemyCall";
 import { getTokensForOwner } from "../../api/etherApi";
 import { LoadingTable } from "../../components/ui/LoadingTable";
+import * as path from "../../routing/path";
 
 export const TokenHoldingsByAddressPage: FC<
   TokenHoldingsByAddressPageProps
@@ -62,7 +63,7 @@ export const TokenHoldingsByAddressPage: FC<
                 <Td>
                   <ChakraLink
                     as={Link}
-                    to={`/addresses/${token.contractAddress}`}
+                    to={`/${path.addresses}/${token.contractAddress}`}
                     color="teal.500"
                   >
                     {token.contractAddress}

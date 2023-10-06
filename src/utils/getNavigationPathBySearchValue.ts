@@ -1,4 +1,5 @@
 import { SearchValueType, getSearchValueType } from "./getSearchValueType";
+import * as path from "../routing/path";
 
 export function getNavigationPathBySearchValueType(
   value: string,
@@ -6,11 +7,11 @@ export function getNavigationPathBySearchValueType(
 ) {
   switch (type) {
     case SearchValueType.BlockNumber:
-      return `/blocks/${value}`;
+      return `/${path.blocks}/${value}`;
     case SearchValueType.Address:
-      return `/addresses/${value}`;
+      return `/${path.addresses}/${value}`;
     case SearchValueType.Transaction:
-      return `/transactions/${value}`;
+      return `/${path.transactions}/${value}`;
   }
   return undefined;
 }

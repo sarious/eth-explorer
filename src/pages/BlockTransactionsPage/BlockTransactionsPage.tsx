@@ -23,6 +23,7 @@ import { useAlchemyApi } from "../../hooks/useAlchemyCall";
 import { getBlockWithTransactions } from "../../api/etherApi";
 import { parseHashOrTag } from "../../utils/parseHashOrTag";
 import { LoadingTable } from "../../components/ui/LoadingTable";
+import * as path from "../../routing/path";
 
 export const BlockTransactionsPage: FC<BlockTransactionsPageProps> = () => {
   const { blockHashOrBlockTag = "latest" } = useParams();
@@ -71,7 +72,7 @@ export const BlockTransactionsPage: FC<BlockTransactionsPageProps> = () => {
                 data?.transactions.map((tx) => (
                   <Tr key={tx.hash}>
                     <Td>
-                      <LinkWithRouter to={`/transactions/${tx.hash}`}>
+                      <LinkWithRouter to={`/${path.transactions}/${tx.hash}`}>
                         {truncTxHash(tx.hash)}
                       </LinkWithRouter>
                     </Td>

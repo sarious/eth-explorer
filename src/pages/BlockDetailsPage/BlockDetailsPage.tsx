@@ -23,9 +23,11 @@ import { useAlchemyApi } from "../../hooks/useAlchemyCall";
 import { getBlock } from "../../api/etherApi";
 import { parseHashOrTag } from "../../utils/parseHashOrTag";
 import { toNumberOrUndefined } from "../../utils/toNumberOrUndefined";
+import * as path from "../../routing/path";
 
 export const BlockDetailsPage: FC<BlockDetailsPageProps> = (props) => {
-  const { blockHashOrBlockTag = "latest" } = useParams();
+  const { [path.blockHashOrBlockTagParam]: blockHashOrBlockTag = "latest" } =
+    useParams();
 
   const { loading, data, fetch } = useAlchemyApi((blockSearch: string) =>
     getBlock(parseHashOrTag(blockSearch))
@@ -38,13 +40,13 @@ export const BlockDetailsPage: FC<BlockDetailsPageProps> = (props) => {
   const navigate = useNavigate();
   const navigateToPrevBlock = () => {
     if (data?.number && data?.number > 0) {
-      navigate(`/blocks/${data?.number - 1}`);
+      navigate(`/${path.blocks}/${data?.number - 1}`);
     }
   };
 
   const navigateToNextBlock = () => {
     if (data) {
-      navigate(`/blocks/${data?.number + 1}`);
+      navigate(`/${path.blocks}/${data?.number + 1}`);
     }
   };
 
@@ -86,7 +88,7 @@ export const BlockDetailsPage: FC<BlockDetailsPageProps> = (props) => {
                 <Skeleton isLoaded={!loading} fitContent={true}>
                   <ChakraLink
                     as={ReactRouterLink}
-                    to={`/blocks/${data?.parentHash}`}
+                    to={`/${path.blocks}/${data?.parentHash}`}
                     color="teal.500"
                   >
                     {data?.parentHash}
@@ -119,7 +121,9 @@ export const BlockDetailsPage: FC<BlockDetailsPageProps> = (props) => {
               <GridItem>
                 <Skeleton isLoaded={!loading} fitContent={true}>
                   {data && (
-                    <LinkWithRouter to={`/blocks/${data.number}/transactions`}>
+                    <LinkWithRouter
+                      to={`/${path.blocks}/${data.number}/transactions`}
+                    >
                       {data?.transactions.length} transactions
                     </LinkWithRouter>
                   )}

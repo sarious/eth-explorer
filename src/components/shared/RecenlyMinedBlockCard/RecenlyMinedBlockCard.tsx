@@ -13,6 +13,7 @@ import {
 } from "@chakra-ui/react";
 import { useAlchemy } from "../../../providers/Alchemy.provider";
 import { Link } from "react-router-dom";
+import * as path from "../../../routing/path";
 
 export const RecenlyMinedBlockCard: FC<RecenlyMinedBlockCardProps> = () => {
   const [recentlyMinedBlock, setRecentlyMinedBlock] = useState<
@@ -37,7 +38,10 @@ export const RecenlyMinedBlockCard: FC<RecenlyMinedBlockCardProps> = () => {
   return (
     <LinkBox as={Card} variant="filled" size="sm">
       <CardHeader>
-        <LinkOverlay as={Link} to={`/blocks/${recentlyMinedBlock || "latest"}`}>
+        <LinkOverlay
+          as={Link}
+          to={`/${path.blocks}/${recentlyMinedBlock || "latest"}`}
+        >
           <Heading size="md">Recently Mined Block</Heading>
         </LinkOverlay>
       </CardHeader>
