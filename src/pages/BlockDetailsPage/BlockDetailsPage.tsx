@@ -121,7 +121,7 @@ export const BlockDetailsPage: FC<BlockDetailsPageProps> = (props) => {
                 <Skeleton isLoaded={!loading} fitContent={true}>
                   {data && (
                     <LinkWithRouter
-                      to={`/${path.blocks}/${data.number}/transactions`}
+                      to={`/${path.blocks}/${data.number}/${path.transactions}`}
                     >
                       {data?.transactions.length} transactions
                     </LinkWithRouter>

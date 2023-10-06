@@ -14,9 +14,10 @@ import {
 import { useParams, Outlet, Link } from "react-router-dom";
 import { useAlchemyApi } from "hooks/useAlchemyCall";
 import { isContractAddress } from "api/etherApi";
+import * as path from "routing/path";
 
 export const AddressPage: FC<AddressPageProps> = () => {
-  const { address = "" } = useParams();
+  const { [path.addressParam]: address = "" } = useParams();
 
   const { data: isContract, loading } = useAlchemyApi(isContractAddress);
 
@@ -33,13 +34,13 @@ export const AddressPage: FC<AddressPageProps> = () => {
       <CardBody as={Flex} direction="column">
         <Tabs mt={4}>
           <TabList>
-            <Tab as={Link} to="details">
+            <Tab as={Link} to={path.details}>
               Details
             </Tab>
-            <Tab as={Link} to="tokens">
+            <Tab as={Link} to={path.tokens}>
               Token Holdings
             </Tab>
-            <Tab as={Link} to="nfts">
+            <Tab as={Link} to={path.nfts}>
               NFTs Holdings
             </Tab>
           </TabList>

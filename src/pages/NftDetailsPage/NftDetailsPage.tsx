@@ -18,9 +18,13 @@ import {
 import { ExternalLinkIcon } from "@chakra-ui/icons";
 import { useAlchemyApi } from "hooks/useAlchemyCall";
 import { getNftMetadata } from "api/etherApi";
+import * as path from "routing/path";
 
 export const NftDetailsPage: FC<NftDetailsPageProps> = (props) => {
-  const { contractAddress = "", tokenId = "" } = useParams();
+  const {
+    [path.contractAddressParam]: contractAddress = "",
+    [path.tokenIdParam]: tokenId = "",
+  } = useParams();
 
   const { data: nft, loading, fetch } = useAlchemyApi(getNftMetadata);
 

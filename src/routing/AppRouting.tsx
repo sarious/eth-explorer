@@ -23,18 +23,21 @@ export function AppRouting() {
         element={<BlockTransactionsPage />}
       />
       <Route
-        path={`${path.transactions}/:txHash`}
+        path={`${path.transactions}/:${path.txHashParam}`}
         element={<TransactionDetailsPage />}
       />
-      <Route path={`${path.addresses}/:address`} element={<AddressPage />}>
-        <Route index element={<Navigate to="details" replace />} />
-        <Route path="details" element={<AddressDetailsPage />} />
-        <Route path="tokens" element={<TokenHoldingsByAddressPage />} />
-        <Route path="nfts" element={<NftByAddressPage />} />
+      <Route
+        path={`${path.addresses}/:${path.addressParam}`}
+        element={<AddressPage />}
+      >
+        <Route index element={<Navigate to={path.details} replace />} />
+        <Route path={path.details} element={<AddressDetailsPage />} />
+        <Route path={path.tokens} element={<TokenHoldingsByAddressPage />} />
+        <Route path={path.nfts} element={<NftByAddressPage />} />
       </Route>
 
       <Route
-        path="nft/:contractAddress/:tokenId"
+        path={`${path.nfts}/:${path.contractAddressParam}/:${path.tokenIdParam}`}
         element={<NftDetailsPage />}
       />
     </Routes>

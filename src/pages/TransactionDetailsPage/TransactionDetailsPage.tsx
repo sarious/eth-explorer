@@ -15,9 +15,10 @@ import { AddressLink } from "components/shared/AddressLink";
 import { useAlchemyApi } from "hooks/useAlchemyCall";
 import { toNumberOrUndefined } from "utils/toNumberOrUndefined";
 import { getTransaction } from "api/etherApi";
+import * as path from "routing/path";
 
 export const TransactionDetailsPage: FC<TransactionDetailsPageProps> = () => {
-  const { txHash = "" } = useParams();
+  const { [path.txHashParam]: txHash = "" } = useParams();
 
   const { data, loading, fetch } = useAlchemyApi(getTransaction);
 

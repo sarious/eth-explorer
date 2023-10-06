@@ -16,6 +16,7 @@ import { AddressLink } from "components/shared/AddressLink";
 import { LoadingTable } from "components/ui/LoadingTable";
 import { useAlchemyApi } from "hooks/useAlchemyCall";
 import { getNftsForOwner } from "api/etherApi";
+import * as path from "routing/path";
 
 export const NftByAddressPage: FC<NftByAddressPageProps> = (props) => {
   const { address = "" } = useParams();
@@ -28,7 +29,7 @@ export const NftByAddressPage: FC<NftByAddressPageProps> = (props) => {
 
   const navigate = useNavigate();
   const nftDetailsClick = (contractAddress: string, tokenId: string) => {
-    navigate(`/nft/${contractAddress}/${tokenId}`);
+    navigate(`/${path.nfts}/${contractAddress}/${tokenId}`);
   };
 
   return (
