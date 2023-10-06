@@ -13,9 +13,9 @@ import {
   Skeleton,
 } from "@chakra-ui/react";
 import { TokenMetadataResponse } from "alchemy-sdk";
-import { useAlchemyApi } from "../../hooks/useAlchemyCall";
+import { useAlchemyApi } from "hooks/useAlchemyCall";
 import { Utils } from "alchemy-sdk";
-import { getBalance, getTokenMetadata } from "../../api/etherApi";
+import { getBalance, getTokenMetadata } from "api/etherApi";
 
 function tokenMetadataExist(
   tokenMetadata: TokenMetadataResponse | undefined

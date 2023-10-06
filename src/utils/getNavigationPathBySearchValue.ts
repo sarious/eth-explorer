@@ -1,5 +1,5 @@
 import { SearchValueType, getSearchValueType } from "./getSearchValueType";
-import * as path from "../routing/path";
+import * as path from "routing/path";
 
 export function getNavigationPathBySearchValueType(
   value: string,

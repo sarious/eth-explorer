@@ -13,11 +13,11 @@ import {
   Link as ChakraLink,
 } from "@chakra-ui/react";
 import { Link, useParams } from "react-router-dom";
-import { truncString } from "../../utils/truncHash";
-import { useAlchemyApi } from "../../hooks/useAlchemyCall";
-import { getTokensForOwner } from "../../api/etherApi";
-import { LoadingTable } from "../../components/ui/LoadingTable";
-import * as path from "../../routing/path";
+import { truncString } from "utils/truncHash";
+import { useAlchemyApi } from "hooks/useAlchemyCall";
+import { getTokensForOwner } from "api/etherApi";
+import { LoadingTable } from "components/ui/LoadingTable";
+import * as path from "routing/path";
 
 export const TokenHoldingsByAddressPage: FC<
   TokenHoldingsByAddressPageProps

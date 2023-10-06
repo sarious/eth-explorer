@@ -17,13 +17,12 @@ import {
   IconButton,
 } from "@chakra-ui/react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
-import { LinkWithRouter } from "../../components/ui/LinkWithRouter";
-import { AddressLink } from "../../components/shared/AddressLink";
-import { useAlchemyApi } from "../../hooks/useAlchemyCall";
-import { getBlock } from "../../api/etherApi";
-import { parseHashOrTag } from "../../utils/parseHashOrTag";
-import { toNumberOrUndefined } from "../../utils/toNumberOrUndefined";
-import * as path from "../../routing/path";
+import { LinkWithRouter } from "components/ui/LinkWithRouter";
+import { AddressLink } from "components/shared/AddressLink";
+import { useAlchemyApi } from "hooks/useAlchemyCall";
+import { getBlock } from "api/etherApi";
+import { parseHashOrTag, toNumberOrUndefined } from "utils";
+import * as path from "routing/path";
 
 export const BlockDetailsPage: FC<BlockDetailsPageProps> = (props) => {
   const { [path.blockHashOrBlockTagParam]: blockHashOrBlockTag = "latest" } =

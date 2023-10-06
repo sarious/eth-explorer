@@ -1,13 +1,13 @@
 import { Navigate, Route, Routes } from "react-router-dom";
-import { BlockDetailsPage } from "../pages/BlockDetailsPage";
-import { AddressDetailsPage } from "../pages/AddressDetailsPage";
-import { BlockTransactionsPage } from "../pages/BlockTransactionsPage";
-import { TransactionDetailsPage } from "../pages/TransactionDetailsPage";
-import { MainPage } from "../pages/MainPage";
-import { NftByAddressPage } from "../pages/NftByAddressPage";
-import { NftDetailsPage } from "../pages/NftDetailsPage";
-import { TokenHoldingsByAddressPage } from "../pages/TokenHoldingsByAddressPage";
-import { AddressPage } from "../pages/AddressPage";
+import { BlockDetailsPage } from "pages/BlockDetailsPage";
+import { AddressDetailsPage } from "pages/AddressDetailsPage";
+import { BlockTransactionsPage } from "pages/BlockTransactionsPage";
+import { TransactionDetailsPage } from "pages/TransactionDetailsPage";
+import { MainPage } from "pages/MainPage";
+import { NftByAddressPage } from "pages/NftByAddressPage";
+import { NftDetailsPage } from "pages/NftDetailsPage";
+import { TokenHoldingsByAddressPage } from "pages/TokenHoldingsByAddressPage";
+import { AddressPage } from "pages/AddressPage";
 import * as path from "./path";
 
 export function AppRouting() {
@@ -26,7 +26,7 @@ export function AppRouting() {
         path={`${path.transactions}/:txHash`}
         element={<TransactionDetailsPage />}
       />
-      <Route path={`${path}/:address`} element={<AddressPage />}>
+      <Route path={`${path.addresses}/:address`} element={<AddressPage />}>
         <Route index element={<Navigate to="details" replace />} />
         <Route path="details" element={<AddressDetailsPage />} />
         <Route path="tokens" element={<TokenHoldingsByAddressPage />} />

@@ -12,8 +12,8 @@ import {
   Tab,
 } from "@chakra-ui/react";
 import { useParams, Outlet, Link } from "react-router-dom";
-import { useAlchemyApi } from "../../hooks/useAlchemyCall";
-import { isContractAddress } from "../../api/etherApi";
+import { useAlchemyApi } from "hooks/useAlchemyCall";
+import { isContractAddress } from "api/etherApi";
 
 export const AddressPage: FC<AddressPageProps> = () => {
   const { address = "" } = useParams();

@@ -12,10 +12,10 @@ import {
   Thead,
   Tr,
 } from "@chakra-ui/react";
-import { AddressLink } from "../../components/shared/AddressLink";
-import { LoadingTable } from "../../components/ui/LoadingTable";
-import { useAlchemyApi } from "../../hooks/useAlchemyCall";
-import { getNftsForOwner } from "../../api/etherApi";
+import { AddressLink } from "components/shared/AddressLink";
+import { LoadingTable } from "components/ui/LoadingTable";
+import { useAlchemyApi } from "hooks/useAlchemyCall";
+import { getNftsForOwner } from "api/etherApi";
 
 export const NftByAddressPage: FC<NftByAddressPageProps> = (props) => {
   const { address = "" } = useParams();

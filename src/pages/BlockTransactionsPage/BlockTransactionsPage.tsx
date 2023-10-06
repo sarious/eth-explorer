@@ -16,14 +16,13 @@ import {
   Thead,
   Tr,
 } from "@chakra-ui/react";
-import { LinkWithRouter } from "../../components/ui/LinkWithRouter";
-import { truncTxHash } from "../../utils/truncHash";
-import { AddressLink } from "../../components/shared/AddressLink";
-import { useAlchemyApi } from "../../hooks/useAlchemyCall";
-import { getBlockWithTransactions } from "../../api/etherApi";
-import { parseHashOrTag } from "../../utils/parseHashOrTag";
-import { LoadingTable } from "../../components/ui/LoadingTable";
-import * as path from "../../routing/path";
+import { LinkWithRouter } from "components/ui/LinkWithRouter";
+import { truncTxHash, parseHashOrTag } from "utils";
+import { AddressLink } from "components/shared/AddressLink";
+import { useAlchemyApi } from "hooks/useAlchemyCall";
+import { getBlockWithTransactions } from "api/etherApi";
+import { LoadingTable } from "components/ui/LoadingTable";
+import * as path from "routing/path";
 
 export const BlockTransactionsPage: FC<BlockTransactionsPageProps> = () => {
   const { blockHashOrBlockTag = "latest" } = useParams();

@@ -10,11 +10,11 @@ import {
   Skeleton,
 } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
-import { BlockLink } from "../../components/shared/BlockLink";
-import { AddressLink } from "../../components/shared/AddressLink";
-import { useAlchemyApi } from "../../hooks/useAlchemyCall";
-import { toNumberOrUndefined } from "../../utils/toNumberOrUndefined";
-import { getTransaction } from "../../api/etherApi";
+import { BlockLink } from "components/shared/BlockLink";
+import { AddressLink } from "components/shared/AddressLink";
+import { useAlchemyApi } from "hooks/useAlchemyCall";
+import { toNumberOrUndefined } from "utils/toNumberOrUndefined";
+import { getTransaction } from "api/etherApi";
 
 export const TransactionDetailsPage: FC<TransactionDetailsPageProps> = () => {
   const { txHash = "" } = useParams();
@@ -23,7 +23,7 @@ export const TransactionDetailsPage: FC<TransactionDetailsPageProps> = () => {
 
   useEffect(() => {
     fetch(txHash);
-  }, []);
+  }, [txHash]);
 
   return (
     <Card m={8}>

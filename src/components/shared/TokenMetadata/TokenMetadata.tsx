@@ -1,9 +1,9 @@
 import { FC } from "react";
 import { TokenMetadataProps } from ".";
 import { Box, Flex, Heading, Image } from "@chakra-ui/react";
-import { useAlchemyApi } from "../../../hooks/useAlchemyCall";
+import { useAlchemyApi } from "hooks/useAlchemyCall";
 import { TokenMetadataResponse } from "alchemy-sdk";
-import { getTokenMetadata } from "../../../api/etherApi";
+import { getTokenMetadata } from "api/etherApi";
 
 function tokenMetadataExist(
   tokenMetadata: TokenMetadataResponse | undefined

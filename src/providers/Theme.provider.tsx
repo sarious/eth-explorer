@@ -1,9 +1,5 @@
 import { ReactNode } from "react";
-import {
-  ChakraBaseProvider,
-  ChakraProvider,
-  extendBaseTheme,
-} from "@chakra-ui/react";
+import { ChakraProvider, extendBaseTheme } from "@chakra-ui/react";
 
 const colors = {
   brand: {

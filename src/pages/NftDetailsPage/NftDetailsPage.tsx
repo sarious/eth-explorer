@@ -16,8 +16,8 @@ import {
   Wrap,
 } from "@chakra-ui/react";
 import { ExternalLinkIcon } from "@chakra-ui/icons";
-import { useAlchemyApi } from "../../hooks/useAlchemyCall";
-import { getNftMetadata } from "../../api/etherApi";
+import { useAlchemyApi } from "hooks/useAlchemyCall";
+import { getNftMetadata } from "api/etherApi";
 
 export const NftDetailsPage: FC<NftDetailsPageProps> = (props) => {
   const { contractAddress = "", tokenId = "" } = useParams();

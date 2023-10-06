@@ -11,9 +11,9 @@ import {
   Skeleton,
   Text,
 } from "@chakra-ui/react";
-import { useAlchemy } from "../../../providers/Alchemy.provider";
+import { useAlchemy } from "providers/Alchemy.provider";
 import { Link } from "react-router-dom";
-import * as path from "../../../routing/path";
+import * as path from "routing/path";
 
 export const RecenlyMinedBlockCard: FC<RecenlyMinedBlockCardProps> = () => {
   const [recentlyMinedBlock, setRecentlyMinedBlock] = useState<
