@@ -5,6 +5,7 @@ import {
   CardBody,
   CardHeader,
   Flex,
+  Heading,
   LinkBox,
   LinkOverlay,
   Skeleton,
@@ -13,9 +14,7 @@ import {
 import { useAlchemy } from "../../../providers/Alchemy.provider";
 import { Link } from "react-router-dom";
 
-export const RecenlyMinedBlockCard: FC<RecenlyMinedBlockCardProps> = (
-  props
-) => {
+export const RecenlyMinedBlockCard: FC<RecenlyMinedBlockCardProps> = () => {
   const [recentlyMinedBlock, setRecentlyMinedBlock] = useState<
     number | undefined
   >(undefined);
@@ -39,11 +38,11 @@ export const RecenlyMinedBlockCard: FC<RecenlyMinedBlockCardProps> = (
     <LinkBox as={Card} variant="filled" size="sm">
       <CardHeader>
         <LinkOverlay as={Link} to={`/blocks/${recentlyMinedBlock || "latest"}`}>
-          Recently Mined Block
+          <Heading size="md">Recently Mined Block</Heading>
         </LinkOverlay>
       </CardHeader>
       <CardBody>
-        <Text as={Flex}>
+        <Text as={Flex} fontSize="xl">
           #
           <Skeleton isLoaded={!loading}>{recentlyMinedBlock || "N/A"}</Skeleton>
         </Text>

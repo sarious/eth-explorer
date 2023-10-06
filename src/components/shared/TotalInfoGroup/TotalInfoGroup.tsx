@@ -5,7 +5,7 @@ import { RecenlyMinedBlockCard } from "../RecenlyMinedBlockCard";
 
 export const TotalInfoGroup: FC<TotalInfoGroupProps> = (props) => {
   return (
-    <Flex>
+    <Flex {...props}>
       <RecenlyMinedBlockCard />
     </Flex>
   );

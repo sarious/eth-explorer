@@ -1,1 +1,3 @@
-export interface TotalInfoGroupProps {};
+import { FlexProps } from "@chakra-ui/react";
+
+export interface TotalInfoGroupProps extends FlexProps {}

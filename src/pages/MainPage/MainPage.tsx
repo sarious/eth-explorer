@@ -30,7 +30,7 @@ export const MainPage: FC<MainPageProps> = (props) => {
       height="100vh"
       {...props}
     >
-      <TotalInfoGroup />
+      <TotalInfoGroup mb={4} />
 
       <Input
         ref={inputRef}

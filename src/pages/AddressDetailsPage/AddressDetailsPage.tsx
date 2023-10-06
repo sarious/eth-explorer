@@ -42,7 +42,7 @@ export const AddressDetailsPage: FC<AddressDetailsPageProps> = (props) => {
   useEffect(() => {
     fetchMetadata(address);
     fetchBalance(address);
-  }, [address]);
+  }, [address, fetchMetadata, getBalance]);
 
   const metadataExist = tokenMetadataExist(tokenMetadata);
 

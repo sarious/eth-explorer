@@ -24,7 +24,7 @@ export const NftByAddressPage: FC<NftByAddressPageProps> = (props) => {
 
   useEffect(() => {
     fetch(address);
-  }, [address]);
+  }, [address, fetch]);
 
   const navigate = useNavigate();
   const nftDetailsClick = (contractAddress: string, tokenId: string) => {

@@ -27,7 +27,7 @@ export const TokenHoldingsByAddressPage: FC<
 
   useEffect(() => {
     fetch(address);
-  }, [address]);
+  }, [address, fetch]);
 
   return (
     <>

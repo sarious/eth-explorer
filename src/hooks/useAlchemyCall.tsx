@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 
 export function useAlchemyApi<T>(p: (...query: any) => Promise<T>): {
   data: T | undefined;
@@ -11,11 +11,10 @@ export function useAlchemyApi<T>(p: (...query: any) => Promise<T>): {
   const [data, setData] = useState<T | undefined>(undefined);
 
   const fetch = useCallback(async (query: any) => {
-    if (loading) return;
     setLoading(true);
 
     try {
-      const result = await p(...query);
+      const result = await p(query);
       setLoading(false);
       setData(result);
     } catch (error) {

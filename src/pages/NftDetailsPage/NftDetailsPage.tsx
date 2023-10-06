@@ -26,7 +26,7 @@ export const NftDetailsPage: FC<NftDetailsPageProps> = (props) => {
 
   useEffect(() => {
     fetch(contractAddress, tokenId);
-  }, [contractAddress, tokenId]);
+  }, [contractAddress, tokenId, fetch]);
 
   // TODO: calculate rarity with alchemy?.nft.computeRarity
 
