@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect, useMemo } from "react";
 import { AddressPageProps } from ".";
 import {
   Card,
@@ -11,15 +11,26 @@ import {
   TabList,
   Tab,
 } from "@chakra-ui/react";
-import { useParams, Outlet, Link } from "react-router-dom";
+import { useParams, Outlet, Link, useMatch } from "react-router-dom";
 import { useAlchemyApi } from "hooks/useAlchemyCall";
 import { isContractAddress } from "api/etherApi";
 import * as path from "routing/path";
+
+const tabs = {
+  [path.details]: "Details",
+  [path.tokens]: "Token Holdings",
+  [path.nfts]: "NFTs Holdings",
+};
 
 export const AddressPage: FC<AddressPageProps> = () => {
   const { [path.addressParam]: address = "" } = useParams();
 
   const { data: isContract, loading } = useAlchemyApi(isContractAddress);
+
+  const match = useMatch("addresses/:address/:tab");
+  const initialIndex = match?.params.tab
+    ? Math.max(Object.keys(tabs).indexOf(match.params.tab), 0)
+    : 0;
 
   return (
     <Card m={8}>
@@ -32,17 +43,13 @@ export const AddressPage: FC<AddressPageProps> = () => {
         </Heading>
       </CardHeader>
       <CardBody as={Flex} direction="column">
-        <Tabs mt={4}>
+        <Tabs mt={4} defaultIndex={initialIndex}>
           <TabList>
-            <Tab as={Link} to={path.details}>
-              Details
-            </Tab>
-            <Tab as={Link} to={path.tokens}>
-              Token Holdings
-            </Tab>
-            <Tab as={Link} to={path.nfts}>
-              NFTs Holdings
-            </Tab>
+            {Object.keys(tabs).map((key) => (
+              <Tab key={key} as={Link} to={key}>
+                {tabs[key as keyof typeof tabs]}
+              </Tab>
+            ))}
           </TabList>
         </Tabs>
 

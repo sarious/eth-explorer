@@ -10,14 +10,13 @@ import {
   Tr,
   Image,
   Box,
-  Link as ChakraLink,
 } from "@chakra-ui/react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { truncString } from "utils/truncHash";
 import { useAlchemyApi } from "hooks/useAlchemyCall";
 import { getTokensForOwner } from "api/etherApi";
 import { LoadingTable } from "components/ui/LoadingTable";
-import * as path from "routing/path";
+import { AddressLink } from "components/shared/AddressLink";
 
 export const TokenHoldingsByAddressPage: FC<
   TokenHoldingsByAddressPageProps
@@ -33,12 +32,12 @@ export const TokenHoldingsByAddressPage: FC<
   return (
     <>
       <TableContainer>
-        <Table size="sm" variant="striped" colorScheme="gray">
+        <Table layout="fixed">
           <Thead>
             <Tr>
               <Th>Token</Th>
               <Th>Balance</Th>
-              <Th>Contract Address</Th>
+              <Th maxWidth={130}>Contract Address</Th>
             </Tr>
           </Thead>
           <Tbody>
@@ -60,14 +59,8 @@ export const TokenHoldingsByAddressPage: FC<
                 <Td>
                   {token.balance} {token.symbol}
                 </Td>
-                <Td>
-                  <ChakraLink
-                    as={Link}
-                    to={`/${path.addresses}/${token.contractAddress}`}
-                    color="teal.500"
-                  >
-                    {token.contractAddress}
-                  </ChakraLink>
+                <Td maxWidth={130}>
+                  <AddressLink address={token.contractAddress} />
                 </Td>
               </Tr>
             ))}

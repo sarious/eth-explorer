@@ -11,6 +11,8 @@ import {
   Th,
   Thead,
   Tr,
+  Image,
+  Box,
 } from "@chakra-ui/react";
 import { AddressLink } from "components/shared/AddressLink";
 import { LoadingTable } from "components/ui/LoadingTable";
@@ -36,7 +38,7 @@ export const NftByAddressPage: FC<NftByAddressPageProps> = (props) => {
     <>
       <Text>Total Count: {nfts?.totalCount}</Text>
       <TableContainer>
-        <Table size="sm" variant="striped" colorScheme="gray">
+        <Table variant="mytable">
           <Thead>
             <Tr>
               <Th maxWidth={70}>Token Id</Th>
@@ -51,28 +53,29 @@ export const NftByAddressPage: FC<NftByAddressPageProps> = (props) => {
           </Thead>
           <Tbody>
             {nfts?.ownedNfts.map((nft, index) => (
-              <Tr key={index}>
+              <Tr
+                key={index}
+                onClick={() =>
+                  nftDetailsClick(nft.contract.address, nft.tokenId)
+                }
+                cursor="pointer"
+              >
                 <Td maxWidth={70} overflow="hidden" textOverflow="ellipsis">
                   {nft.tokenId}
                 </Td>
                 <Td>{nft.balance}</Td>
-                <Td
-                  onClick={() =>
-                    nftDetailsClick(nft.contract.address, nft.tokenId)
-                  }
-                >
+                <Td>
                   <Flex>
                     {nft.contract.openSea?.imageUrl && (
-                      <img
+                      <Image
                         src={nft.contract.openSea?.imageUrl}
                         alt={`NFT ${nft.tokenId}`}
-                        width="60"
-                        height="60"
+                        boxSize={12}
                       />
                     )}
                     <Flex direction="column" justifyContent="center">
-                      <div>{nft.title}</div>
-                      <div>{nft.contract?.openSea?.collectionName}</div>
+                      <Box>{nft.title}</Box>
+                      <Box>{nft.contract?.openSea?.collectionName}</Box>
                     </Flex>
                   </Flex>
                 </Td>

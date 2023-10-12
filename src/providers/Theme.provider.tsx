@@ -1,18 +1,48 @@
 import { ReactNode } from "react";
-import { ChakraProvider, extendBaseTheme } from "@chakra-ui/react";
+import {
+  ChakraProvider,
+  extendBaseTheme,
+  extendTheme,
+  withDefaultColorScheme,
+} from "@chakra-ui/react";
 
-const colors = {
-  brand: {
-    900: "#1a365d",
-    800: "#153e75",
-    700: "#2a69ac",
-  },
-};
-
-const theme = extendBaseTheme({
-  colors,
-});
+const customTheme = extendTheme(
+  withDefaultColorScheme({ colorScheme: "teal" }),
+  {
+    components: {
+      Table: {
+        defaultProps: {
+          size: "sm",
+          variant: "striped",
+          colorScheme: "gray",
+        },
+        variants: {
+          mytable: {
+            tr: {
+              _odd: {
+                background: "gray.100",
+              },
+              _hover: {
+                background: "gray.200",
+              },
+            },
+          },
+        },
+      },
+      Td: {
+        baseStyle: {
+          fontWeight: "bold",
+          textTransform: "uppercase",
+          borderRadius: "base",
+          bgColor: "red",
+          bg: "red",
+          backgroundColor: "red",
+        },
+      },
+    },
+  }
+);
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  return <ChakraProvider>{children}</ChakraProvider>;
+  return <ChakraProvider theme={customTheme}>{children}</ChakraProvider>;
 }
