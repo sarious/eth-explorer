@@ -4,7 +4,7 @@ import {
   Link as ReactRouterLink,
   useNavigate,
 } from "react-router-dom";
-import { Link as ChakraLink, Skeleton } from "@chakra-ui/react";
+import { Button, Link as ChakraLink, Skeleton } from "@chakra-ui/react";
 import { BlockDetailsPageProps } from ".";
 import {
   Card,
@@ -37,6 +37,10 @@ export const BlockDetailsPage: FC<BlockDetailsPageProps> = (props) => {
   }, [blockHashOrBlockTag]);
 
   const navigate = useNavigate();
+  const navigateToLatestBlock = () => {
+      navigate(`/${path.blocks}/latest`);
+  };
+  
   const navigateToPrevBlock = () => {
     if (data?.number && data?.number > 0) {
       navigate(`/${path.blocks}/${data?.number - 1}`);
@@ -55,13 +59,14 @@ export const BlockDetailsPage: FC<BlockDetailsPageProps> = (props) => {
         <Card m={8}>
           <CardHeader>
             <Flex>
-              <Heading size="md">Block #{data?.number}</Heading>
+              <Heading size="md">Block #{data?.number ?? blockHashOrBlockTag} {!data && '(not available now)'}</Heading>
 
+              <Button ml={2} size="sm" onClick={navigateToLatestBlock}>Latest</Button>
               <IconButton
                 aria-label="Select previous block"
                 icon={<ChevronLeftIcon />}
                 size="sm"
-                ml={4}
+                ml={2}
                 onClick={navigateToPrevBlock}
               />
               <IconButton
