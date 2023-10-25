@@ -27,7 +27,7 @@ export const TransactionDetailsPage: FC<TransactionDetailsPageProps> = () => {
   }, [txHash]);
 
   return (
-    <Card m={8}>
+    <Card>
       <CardHeader>
         <Heading as="span" size="md">
           Transaction {data?.hash ?? txHash}

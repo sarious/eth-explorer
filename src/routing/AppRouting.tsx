@@ -9,37 +9,41 @@ import { NftDetailsPage } from "pages/NftDetailsPage";
 import { TokenHoldingsByAddressPage } from "pages/TokenHoldingsByAddressPage";
 import { AddressPage } from "pages/AddressPage";
 import * as path from "./path";
+import { Layout } from 'components/shared/Layout';
 
 export function AppRouting() {
   return (
     <Routes>
       <Route index element={<MainPage />} />
-      <Route
-        path={`${path.blocks}/:${path.blockHashOrBlockTagParam}`}
-        element={<BlockDetailsPage />}
-      />
-      <Route
-        path={`${path.blocks}/:${path.blockHashOrBlockTagParam}/${path.transactions}`}
-        element={<BlockTransactionsPage />}
-      />
-      <Route
-        path={`${path.transactions}/:${path.txHashParam}`}
-        element={<TransactionDetailsPage />}
-      />
-      <Route
-        path={`${path.addresses}/:${path.addressParam}`}
-        element={<AddressPage />}
-      >
-        <Route index element={<Navigate to={path.details} replace />} />
-        <Route path={path.details} element={<AddressDetailsPage />} />
-        <Route path={path.tokens} element={<TokenHoldingsByAddressPage />} />
-        <Route path={path.nfts} element={<NftByAddressPage />} />
-      </Route>
+      <Route element={<Layout />}>
+        <Route
+          path={`${path.blocks}/:${path.blockHashOrBlockTagParam}`}
+          element={<BlockDetailsPage />}
+        />
+        <Route
+          path={`${path.blocks}/:${path.blockHashOrBlockTagParam}/${path.transactions}`}
+          element={<BlockTransactionsPage />}
+        />
+        <Route
+          path={`${path.transactions}/:${path.txHashParam}`}
+          element={<TransactionDetailsPage />}
+        />
+        <Route
+          path={`${path.addresses}/:${path.addressParam}`}
+          element={<AddressPage />}
+        >
+          <Route index element={<Navigate to={path.details} replace />} />
+          <Route path={path.details} element={<AddressDetailsPage />} />
+          <Route path={path.tokens} element={<TokenHoldingsByAddressPage />} />
+          <Route path={path.nfts} element={<NftByAddressPage />} />
+        </Route>
 
-      <Route
-        path={`${path.nfts}/:${path.contractAddressParam}/:${path.tokenIdParam}`}
-        element={<NftDetailsPage />}
-      />
+        <Route
+          path={`${path.nfts}/:${path.contractAddressParam}/:${path.tokenIdParam}`}
+          element={<NftDetailsPage />}
+        />
+      </Route>
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 }

@@ -4,12 +4,12 @@ import { LinkWithRouter } from "components/ui/LinkWithRouter";
 import { truncAddress } from "utils/truncHash";
 import * as path from "routing/path";
 
-export const AddressLink: FC<AddressLinkProps> = ({ address, ...props }) => {
+export const AddressLink: FC<AddressLinkProps> = ({ address, short, ...props }) => {
   return (
     <>
       {address && (
         <LinkWithRouter to={`/${path.addresses}/${address}`}>
-          {truncAddress(address)}
+          {short ? truncAddress(address) : address}
         </LinkWithRouter>
       )}
     </>

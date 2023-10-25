@@ -19,6 +19,8 @@ import { ExternalLinkIcon } from "@chakra-ui/icons";
 import { useAlchemyApi } from "hooks/useAlchemyCall";
 import { getNftMetadata } from "api/etherApi";
 import * as path from "routing/path";
+import { AddressLink } from "components/shared/AddressLink";
+import { BlockLink } from "components/shared/BlockLink";
 
 export const NftDetailsPage: FC<NftDetailsPageProps> = (props) => {
   const {
@@ -41,21 +43,32 @@ export const NftDetailsPage: FC<NftDetailsPageProps> = (props) => {
   return (
     <>
       {nft && (
-        <Flex direction="column" m={8}>
+        <Flex direction="column">
           <Flex>
-            <Card mr={8} as={Flex} justifyContent="center" alignItems="center">
+            <Card
+              mr={8}
+              p={2}
+              as={Flex}
+              alignItems="center"
+              style={{ minWidth: "40vw", height: "100%" }}
+            >
               {nft.rawMetadata?.image && (
                 <Image
                   src={nft.rawMetadata?.image}
                   alt={`NFT ${nft.tokenId}`}
-                  boxSize="400px"
+                  boxSize="40vw"
                   objectFit="contain"
                 />
               )}
+              {!nft.rawMetadata?.image && <Text>No image</Text>}
             </Card>
-            <Flex direction="column">
-              <Heading>{nft.title || nft.rawMetadata?.name}</Heading>
-              <Text>{nft.contract.openSea?.collectionName}</Text>
+            <Flex direction="column" width={"60vw"}>
+              <Heading>
+                Title: {nft.title || nft.rawMetadata?.name || "N/A"}
+              </Heading>
+              <Text>
+                Collection: {nft.contract.openSea?.collectionName || "N/A"}
+              </Text>
 
               <Card mt={8}>
                 <TableContainer>
@@ -63,12 +76,31 @@ export const NftDetailsPage: FC<NftDetailsPageProps> = (props) => {
                     <Tbody>
                       <Tr>
                         <Td>Contract Address</Td>
-                        <Td>{nft.contract.address}</Td>
+                        <Td>
+                          <AddressLink address={nft.contract.address} />
+                        </Td>
                       </Tr>
 
                       <Tr>
                         <Td>Creator</Td>
-                        <Td>{nft.contract.contractDeployer}</Td>
+                        <Td>
+                          <AddressLink
+                            address={nft.contract.contractDeployer}
+                          />
+                        </Td>
+                      </Tr>
+
+                      <Tr>
+                        <Td>Deployed Block #</Td>
+                        <Td>
+                          {nft.contract.deployedBlockNumber ? (
+                            <BlockLink
+                              data={nft.contract.deployedBlockNumber}
+                            />
+                          ) : (
+                            "N/A"
+                          )}
+                        </Td>
                       </Tr>
 
                       <Tr>
@@ -84,14 +116,17 @@ export const NftDetailsPage: FC<NftDetailsPageProps> = (props) => {
                       <Tr>
                         <Td>URL</Td>
                         <Td>
-                          <Link
-                            href={nft.contract.openSea?.externalUrl}
-                            isExternal
-                            color="teal.500"
-                          >
-                            {nft.contract.openSea?.externalUrl}
-                            <ExternalLinkIcon mx="2px" />
-                          </Link>
+                          {nft.contract.openSea?.externalUrl ? (
+                            <Link
+                              href={nft.contract.openSea?.externalUrl}
+                              isExternal
+                            >
+                              {nft.contract.openSea?.externalUrl}
+                              <ExternalLinkIcon mx="2px" />
+                            </Link>
+                          ) : (
+                            "N/A"
+                          )}
                         </Td>
                       </Tr>
 
@@ -102,9 +137,9 @@ export const NftDetailsPage: FC<NftDetailsPageProps> = (props) => {
                             <Link
                               href={nft.contract.openSea?.discordUrl}
                               isExternal
-                              color="teal.500"
                             >
                               {nft.contract.openSea?.discordUrl}
+                              <ExternalLinkIcon mx="2px" />
                             </Link>
                           </Td>
                         </Tr>
@@ -119,23 +154,34 @@ export const NftDetailsPage: FC<NftDetailsPageProps> = (props) => {
                       {nft.description && (
                         <Tr>
                           <Td>Description</Td>
-                          <Td>{nft.description}</Td>
+                          <Td whiteSpace="break-spaces" wordBreak="break-word">
+                            {nft.description}
+                          </Td>
                         </Tr>
                       )}
                     </Tbody>
                   </Table>
                 </TableContainer>
               </Card>
+
+              <Heading mt={8}>Rarity</Heading>
+              <Wrap>
+                {nft?.rawMetadata?.attributes?.map((attr) => (
+                  <Card minWidth="100px" mr={4} mt={4}>
+                    <Text p={4} bg="gray.100">
+                      {attr.trait_type}
+                    </Text>
+                    <Text p={4}>{attr.value}</Text>
+                  </Card>
+                ))}
+                {!nft?.rawMetadata?.attributes?.length && (
+                  <Card mt={4} p={4} width="100%">
+                    No rarity data available
+                  </Card>
+                )}
+              </Wrap>
             </Flex>
           </Flex>
-          <Wrap mt={8}>
-            {nft?.rawMetadata?.attributes?.map((attr) => (
-              <Card minWidth="100px" mr={4}>
-                <Text>{attr.trait_type}</Text>
-                <Text>{attr.value}</Text>
-              </Card>
-            ))}
-          </Wrap>
         </Flex>
       )}
     </>

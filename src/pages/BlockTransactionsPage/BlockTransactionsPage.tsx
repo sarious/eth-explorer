@@ -23,6 +23,7 @@ import { useAlchemyApi } from "hooks/useAlchemyCall";
 import { getBlockWithTransactions } from "api/etherApi";
 import { LoadingTable } from "components/ui/LoadingTable";
 import * as path from "routing/path";
+import { BlockLink } from 'components/shared/BlockLink';
 
 export const BlockTransactionsPage: FC<BlockTransactionsPageProps> = () => {
   const { blockHashOrBlockTag = "latest" } = useParams();
@@ -36,10 +37,10 @@ export const BlockTransactionsPage: FC<BlockTransactionsPageProps> = () => {
   }, [blockHashOrBlockTag]);
 
   return (
-    <Card m={8}>
+    <Card>
       <CardHeader>
         <Heading size="md">
-          Transactions of block #{data?.number ?? blockHashOrBlockTag} (
+          Transactions of block #<BlockLink data={data?.number ?? blockHashOrBlockTag} /> (
           <Skeleton as="span" isLoaded={!loading} fitContent>
             {loading && "12"}
             {!loading && data?.transactions[0].confirmations}
@@ -76,10 +77,10 @@ export const BlockTransactionsPage: FC<BlockTransactionsPageProps> = () => {
                       </LinkWithRouter>
                     </Td>
                     <Td>
-                      <AddressLink address={tx.from} />
+                      <AddressLink address={tx.from} short />
                     </Td>
                     <Td>
-                      <AddressLink address={tx.to} />
+                      <AddressLink address={tx.to} short />
                     </Td>
                     <Td>
                       {tx.value ? (

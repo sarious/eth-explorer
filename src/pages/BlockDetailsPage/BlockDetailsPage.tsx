@@ -23,6 +23,7 @@ import { useAlchemyApi } from "hooks/useAlchemyCall";
 import { getBlock } from "api/etherApi";
 import { parseHashOrTag, toNumberOrUndefined } from "utils";
 import * as path from "routing/path";
+import { BlockLink } from 'components/shared/BlockLink';
 
 export const BlockDetailsPage: FC<BlockDetailsPageProps> = (props) => {
   const { [path.blockHashOrBlockTagParam]: blockHashOrBlockTag = "latest" } =
@@ -40,7 +41,7 @@ export const BlockDetailsPage: FC<BlockDetailsPageProps> = (props) => {
   const navigateToLatestBlock = () => {
       navigate(`/${path.blocks}/latest`);
   };
-  
+
   const navigateToPrevBlock = () => {
     if (data?.number && data?.number > 0) {
       navigate(`/${path.blocks}/${data?.number - 1}`);
@@ -54,131 +55,121 @@ export const BlockDetailsPage: FC<BlockDetailsPageProps> = (props) => {
   };
 
   return (
-    <>
-      {
-        <Card m={8}>
-          <CardHeader>
-            <Flex>
-              <Heading size="md">Block #{data?.number ?? blockHashOrBlockTag} {!data && '(not available now)'}</Heading>
+    <Card>
+      <CardHeader>
+        <Flex>
+          <Heading size="md">Block #{data?.number ?? blockHashOrBlockTag} {!data && '(not available now)'}</Heading>
 
-              <Button ml={2} size="sm" onClick={navigateToLatestBlock}>Latest</Button>
-              <IconButton
-                aria-label="Select previous block"
-                icon={<ChevronLeftIcon />}
-                size="sm"
-                ml={2}
-                onClick={navigateToPrevBlock}
-              />
-              <IconButton
-                aria-label="Select previous block"
-                icon={<ChevronRightIcon />}
-                size="sm"
-                ml={2}
-                onClick={navigateToNextBlock}
-              />
-            </Flex>
-          </CardHeader>
-          <CardBody>
-            <Grid templateColumns="1fr 3fr" gap={6}>
-              <GridItem>Block Hash: </GridItem>
-              <GridItem>
-                <Skeleton isLoaded={!loading} fitContent={true}>
-                  {data?.hash}
-                </Skeleton>
-              </GridItem>
+          <Button ml={2} size="sm" onClick={navigateToLatestBlock}>Latest</Button>
+          <IconButton
+            aria-label="Select previous block"
+            icon={<ChevronLeftIcon />}
+            size="sm"
+            ml={2}
+            onClick={navigateToPrevBlock}
+          />
+          <IconButton
+            aria-label="Select previous block"
+            icon={<ChevronRightIcon />}
+            size="sm"
+            ml={2}
+            onClick={navigateToNextBlock}
+          />
+        </Flex>
+      </CardHeader>
+      <CardBody>
+        <Grid templateColumns="1fr 3fr" gap={6}>
+          <GridItem>Block Hash: </GridItem>
+          <GridItem>
+            <Skeleton isLoaded={!loading} fitContent={true}>
+              {data?.hash}
+            </Skeleton>
+          </GridItem>
 
-              <GridItem>Hash of Parent Block: </GridItem>
-              <GridItem>
-                <Skeleton isLoaded={!loading} fitContent={true}>
-                  <ChakraLink
-                    as={ReactRouterLink}
-                    to={`/${path.blocks}/${data?.parentHash}`}
-                    color="teal.500"
-                  >
-                    {data?.parentHash}
-                  </ChakraLink>
-                </Skeleton>
-              </GridItem>
+          <GridItem>Hash of Parent Block: </GridItem>
+          <GridItem>
+            <Skeleton isLoaded={!loading} fitContent={true}>
+              <BlockLink data={data?.parentHash} />
+            </Skeleton>
+          </GridItem>
 
-              <GridItem>Block Number: </GridItem>
-              <GridItem>
-                <Skeleton isLoaded={!loading} fitContent={true}>
-                  {data?.number}
-                </Skeleton>
-              </GridItem>
+          <GridItem>Block Number: </GridItem>
+          <GridItem>
+            <Skeleton isLoaded={!loading} fitContent={true}>
+              {data?.number}
+            </Skeleton>
+          </GridItem>
 
-              <GridItem>Timestamp: </GridItem>
-              <GridItem>
-                <Skeleton isLoaded={!loading} fitContent={true}>
-                  {data?.timestamp}
-                </Skeleton>
-              </GridItem>
+          <GridItem>Timestamp: </GridItem>
+          <GridItem>
+            <Skeleton isLoaded={!loading} fitContent={true}>
+              {data?.timestamp}
+            </Skeleton>
+          </GridItem>
 
-              <GridItem>Nonce: </GridItem>
-              <GridItem>
-                <Skeleton isLoaded={!loading} fitContent={true}>
-                  {data?.nonce}
-                </Skeleton>
-              </GridItem>
+          <GridItem>Nonce: </GridItem>
+          <GridItem>
+            <Skeleton isLoaded={!loading} fitContent={true}>
+              {data?.nonce}
+            </Skeleton>
+          </GridItem>
 
-              <GridItem>Transactions: </GridItem>
-              <GridItem>
-                <Skeleton isLoaded={!loading} fitContent={true}>
-                  {data && (
-                    <LinkWithRouter
-                      to={`/${path.blocks}/${data.number}/${path.transactions}`}
-                    >
-                      {data?.transactions.length} transactions
-                    </LinkWithRouter>
-                  )}
-                </Skeleton>
-              </GridItem>
+          <GridItem>Transactions: </GridItem>
+          <GridItem>
+            <Skeleton isLoaded={!loading} fitContent={true}>
+              {data && (
+                <LinkWithRouter
+                  to={`/${path.blocks}/${data.number}/${path.transactions}`}
+                >
+                  {data?.transactions.length} transactions
+                </LinkWithRouter>
+              )}
+            </Skeleton>
+          </GridItem>
 
-              <GridItem>Difficulty: </GridItem>
-              <GridItem>
-                <Skeleton isLoaded={!loading} fitContent={true}>
-                  {data?.difficulty}
-                </Skeleton>
-              </GridItem>
+          <GridItem>Difficulty: </GridItem>
+          <GridItem>
+            <Skeleton isLoaded={!loading} fitContent={true}>
+              {data?.difficulty}
+            </Skeleton>
+          </GridItem>
 
-              <GridItem>Gas Limit: </GridItem>
-              <GridItem>
-                <Skeleton isLoaded={!loading} fitContent={true}>
-                  {toNumberOrUndefined(data?.gasLimit)}
-                </Skeleton>
-              </GridItem>
+          <GridItem>Gas Limit: </GridItem>
+          <GridItem>
+            <Skeleton isLoaded={!loading} fitContent={true}>
+              {toNumberOrUndefined(data?.gasLimit)}
+            </Skeleton>
+          </GridItem>
 
-              <GridItem>Gas Used: </GridItem>
-              <GridItem>
-                <Skeleton isLoaded={!loading} fitContent={true}>
-                  {toNumberOrUndefined(data?.gasUsed)}
-                </Skeleton>
-              </GridItem>
+          <GridItem>Gas Used: </GridItem>
+          <GridItem>
+            <Skeleton isLoaded={!loading} fitContent={true}>
+              {toNumberOrUndefined(data?.gasUsed)}
+            </Skeleton>
+          </GridItem>
 
-              <GridItem>Base Fee Per Gas: </GridItem>
-              <GridItem>
-                <Skeleton isLoaded={!loading} fitContent={true}>
-                  {toNumberOrUndefined(data?.baseFeePerGas)} wei
-                </Skeleton>
-              </GridItem>
+          <GridItem>Base Fee Per Gas: </GridItem>
+          <GridItem>
+            <Skeleton isLoaded={!loading} fitContent={true}>
+              {toNumberOrUndefined(data?.baseFeePerGas)} wei
+            </Skeleton>
+          </GridItem>
 
-              <GridItem>Miner Address: </GridItem>
-              <GridItem>
-                <Skeleton isLoaded={!loading} fitContent={true}>
-                  <AddressLink address={data?.miner} />
-                </Skeleton>
-              </GridItem>
+          <GridItem>Miner Address: </GridItem>
+          <GridItem>
+            <Skeleton isLoaded={!loading} fitContent={true}>
+              <AddressLink address={data?.miner} />
+            </Skeleton>
+          </GridItem>
 
-              <GridItem>Extra Data: </GridItem>
-              <GridItem>
-                <Skeleton isLoaded={!loading} fitContent={true}>
-                  {data?.extraData}
-                </Skeleton>
-              </GridItem>
-            </Grid>
-          </CardBody>
-        </Card>
-      }
-    </>
+          <GridItem>Extra Data: </GridItem>
+          <GridItem>
+            <Skeleton isLoaded={!loading} fitContent={true}>
+              {data?.extraData}
+            </Skeleton>
+          </GridItem>
+        </Grid>
+      </CardBody>
+    </Card>
   );
 };

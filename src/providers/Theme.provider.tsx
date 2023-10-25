@@ -29,6 +29,15 @@ const customTheme = extendTheme(
           },
         },
       },
+      Link: {
+        baseStyle: {
+          color: "teal.500",
+          textDecoration: "none",
+          _hover: {
+            textDecoration: "underline",
+          },
+        }
+      },
       Td: {
         baseStyle: {
           fontWeight: "bold",

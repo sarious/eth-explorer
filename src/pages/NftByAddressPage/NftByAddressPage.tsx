@@ -66,14 +66,24 @@ export const NftByAddressPage: FC<NftByAddressPageProps> = (props) => {
                 <Td>{nft.balance}</Td>
                 <Td>
                   <Flex>
-                    {nft.contract.openSea?.imageUrl && (
-                      <Image
-                        src={nft.contract.openSea?.imageUrl}
-                        alt={`NFT ${nft.tokenId}`}
-                        boxSize={12}
-                      />
-                    )}
-                    <Flex direction="column" justifyContent="center">
+                    <Image
+                      src={nft.contract.openSea?.imageUrl}
+                      alt={`NFT ${nft.tokenId}`}
+                      boxSize={12}
+                      fallback={
+                        <Flex
+                          boxSize={12}
+                          bgColor="gray.100"
+                          border="1px solid black"
+                          justifyContent="center"
+                          alignItems="center"
+                        >
+                          N/A
+                        </Flex>
+                      }
+                    />
+
+                    <Flex direction="column" justifyContent="center" ml={2}>
                       <Box>{nft.title}</Box>
                       <Box>{nft.contract?.openSea?.collectionName}</Box>
                     </Flex>

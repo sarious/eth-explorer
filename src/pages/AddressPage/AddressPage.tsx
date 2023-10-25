@@ -1,4 +1,4 @@
-import { FC, useEffect, useMemo } from "react";
+import { FC } from "react";
 import { AddressPageProps } from ".";
 import {
   Card,
@@ -15,6 +15,7 @@ import { useParams, Outlet, Link, useMatch } from "react-router-dom";
 import { useAlchemyApi } from "hooks/useAlchemyCall";
 import { isContractAddress } from "api/etherApi";
 import * as path from "routing/path";
+import { AddressLink } from 'components/shared/AddressLink';
 
 const tabs = {
   [path.details]: "Details",
@@ -33,13 +34,13 @@ export const AddressPage: FC<AddressPageProps> = () => {
     : 0;
 
   return (
-    <Card m={8}>
+    <Card>
       <CardHeader>
         <Heading as="span" size="md">
           <Skeleton as="span" isLoaded={!loading}>
             {isContract ? "Contract" : "Address"}{" "}
           </Skeleton>
-          {address}
+          <AddressLink address={address} />
         </Heading>
       </CardHeader>
       <CardBody as={Flex} direction="column">

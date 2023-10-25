@@ -8,7 +8,7 @@ export const LinkWithRouter: FC<LinkWithRouterProps> = ({
   ...props
 }) => {
   return (
-    <ChakraLink as={ReactRouterLink} color="teal.500" {...props}>
+    <ChakraLink as={ReactRouterLink} {...props}>
       {children}
     </ChakraLink>
   );

@@ -1,1 +1,3 @@
-export interface RecenlyMinedBlockCardProps {};
+export interface RecenlyMinedBlockCardProps {
+  showTitle?: boolean;
+};
